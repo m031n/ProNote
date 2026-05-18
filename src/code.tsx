@@ -195,17 +195,63 @@ function normalizeCategory(category: string): CategoryKey {
   return "technical";
 }
 
+function gregorianToJalali(gy: number, gm: number, gd: number) {
+  const gDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const jDaysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+  const gyBase = gy - 1600;
+  const gmBase = gm - 1;
+  const gdBase = gd - 1;
+
+  let gDayNo =
+    365 * gyBase +
+    Math.floor((gyBase + 3) / 4) -
+    Math.floor((gyBase + 99) / 100) +
+    Math.floor((gyBase + 399) / 400);
+
+  for (let i = 0; i < gmBase; i += 1) {
+    gDayNo += gDaysInMonth[i];
+  }
+
+  if (gmBase > 1 && ((gyBase + 1600) % 4 === 0 && ((gyBase + 1600) % 100 !== 0 || (gyBase + 1600) % 400 === 0))) {
+    gDayNo += 1;
+  }
+
+  gDayNo += gdBase;
+
+  let jDayNo = gDayNo - 79;
+  const jNp = Math.floor(jDayNo / 12053);
+  jDayNo %= 12053;
+
+  let jy = 979 + 33 * jNp + 4 * Math.floor(jDayNo / 1461);
+  jDayNo %= 1461;
+
+  if (jDayNo >= 366) {
+    jy += Math.floor((jDayNo - 1) / 365);
+    jDayNo = (jDayNo - 1) % 365;
+  }
+
+  let jm = 0;
+  for (; jm < 11 && jDayNo >= jDaysInMonth[jm]; jm += 1) {
+    jDayNo -= jDaysInMonth[jm];
+  }
+
+  return {
+    year: jy,
+    month: jm + 1,
+    day: jDayNo + 1
+  };
+}
+
+function toTwoDigit(value: number) {
+  return value < 10 ? `0${value}` : `${value}`;
+}
+
 function formatUpdatedAt(value: string) {
   if (!value) return "Not updated yet";
-  const parts = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  }).formatToParts(new Date(value));
-  const year = parts.find((part) => part.type === "year")?.value || "";
-  const month = parts.find((part) => part.type === "month")?.value || "";
-  const day = parts.find((part) => part.type === "day")?.value || "";
-  return `${year}/${month}/${day}`;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Not updated yet";
+  const jalaliDate = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+  return `${jalaliDate.year}/${toTwoDigit(jalaliDate.month)}/${toTwoDigit(jalaliDate.day)}`;
 }
 
 type CurrentUserSnapshot = { id: string; name: string };
