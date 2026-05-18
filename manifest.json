@@ -1,6 +1,6 @@
 {
-  "name": "Consistency Note",
-  "id": "consistency-note-widget",
+  "name": "ProNote Widget",
+  "id": "pro-note-widget",
   "api": "1.0.0",
   "widgetApi": "1.0.0",
   "editorType": ["figma", "figjam"],

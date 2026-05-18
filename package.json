@@ -1,10 +1,12 @@
 {
-  "name": "consistency-note-widget",
+  "name": "pronote-widget",
   "version": "0.1.0",
   "private": true,
-  "description": "Figma note widget for design file annotations with categories, authors, scaling, and connector legs.",
+  "description": "Figma widget for structured product and design notes with authors, categories, links, and connector legs.",
   "scripts": {
     "build": "esbuild src/code.tsx --bundle --outfile=dist/code.js --jsx-factory=figma.widget.h --jsx-fragment=figma.widget.Fragment --target=es2017 --loader:.jpg=dataurl",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "npm run build",
     "watch": "npm run build -- --watch"
   },
   "devDependencies": {
