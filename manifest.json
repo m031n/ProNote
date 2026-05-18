@@ -1,0 +1,15 @@
+{
+  "name": "Consistency Note",
+  "id": "consistency-note-widget",
+  "api": "1.0.0",
+  "widgetApi": "1.0.0",
+  "editorType": ["figma", "figjam"],
+  "containsWidget": true,
+  "main": "dist/code.js",
+  "ui": "src/ui.html",
+  "documentAccess": "dynamic-page",
+  "permissions": ["currentuser"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}

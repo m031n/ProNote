@@ -1,0 +1,16 @@
+{
+  "name": "consistency-note-widget",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Figma note widget for design file annotations with categories, authors, scaling, and connector legs.",
+  "scripts": {
+    "build": "esbuild src/code.tsx --bundle --outfile=dist/code.js --jsx-factory=figma.widget.h --jsx-fragment=figma.widget.Fragment --target=es2017 --loader:.jpg=dataurl",
+    "watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.125.0",
+    "@figma/widget-typings": "^1.12.1",
+    "esbuild": "^0.25.4",
+    "typescript": "^5.8.3"
+  }
+}
