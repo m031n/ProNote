@@ -14,7 +14,7 @@ ProNote is a Figma/FigJam widget for structured product and design notes. It sup
 
 ## Local Setup
 
-Install dependencies:
+Install dependencies if you want to edit or rebuild the widget:
 
 ```bash
 npm install
@@ -45,7 +45,7 @@ npm run watch
 3. Select this repository's `manifest.json` file.
 4. Run `ProNote Widget` from the development widgets list.
 
-The generated widget code is written to `dist/code.js`. The `dist` folder is ignored by Git, so build locally before importing the widget in Figma.
+The built widget code is included at `dist/code.js`, so the GitHub ZIP can be imported directly into Figma without running build commands first.
 
 ## Project Structure
 
