@@ -562,7 +562,11 @@
             left: scaleValue(16, scale)
           },
           cornerRadius: headerRadius,
-          fill: "#FFF9F7"
+          fill: {
+            type: "solid",
+            color: "#FFFFFF",
+            opacity: 0.6
+          }
         },
         /* @__PURE__ */ figma.widget.h(
           AutoLayout,

@@ -724,7 +724,11 @@ function NoteCard({
             left: scaleValue(16, scale)
           }}
           cornerRadius={headerRadius}
-          fill="#FFF9F7"
+          fill={{
+            type: "solid",
+            color: "#FFFFFF",
+            opacity: 0.6
+          }}
         >
           <AutoLayout
             width={16}
