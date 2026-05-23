@@ -113,6 +113,28 @@
     medium: 500,
     large: 700
   };
+  var BODY_GRADIENT_COLORS = {
+    technical: {
+      top: { r: 251 / 255, g: 255 / 255, b: 252 / 255, a: 1 },
+      bottom: { r: 218 / 255, g: 246 / 255, b: 225 / 255, a: 1 }
+    },
+    design: {
+      top: { r: 250 / 255, g: 252 / 255, b: 255 / 255, a: 1 },
+      bottom: { r: 224 / 255, g: 232 / 255, b: 255 / 255, a: 1 }
+    },
+    business: {
+      top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
+      bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
+    },
+    design_changes: {
+      top: { r: 254 / 255, g: 250 / 255, b: 255 / 255, a: 1 },
+      bottom: { r: 242 / 255, g: 219 / 255, b: 249 / 255, a: 1 }
+    },
+    feedback: {
+      top: { r: 255 / 255, g: 253 / 255, b: 247 / 255, a: 1 },
+      bottom: { r: 255 / 255, g: 239 / 255, b: 199 / 255, a: 1 }
+    }
+  };
   var MENU_ICONS = {
     simpleAdvanced: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22V16M9 19L12 22L15 19M12 8V2M9 5L12 2L15 5M4 12H2M10 12H8M16 12H14M22 12H20" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     addLink: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 17H7C5.67392 17 4.40215 16.4732 3.46447 15.5355C2.52678 14.5979 2 13.3261 2 12C2 10.6739 2.52678 9.40215 3.46447 8.46447C4.40215 7.52678 5.67392 7 7 7H9M15 7H17C18.3261 7 19.5979 7.52678 20.5355 8.46447C21.4732 9.40215 22 10.6739 22 12C22 13.3261 21.4732 14.5979 20.5355 15.5355C19.5979 16.4732 18.3261 17 17 17H15M8 12H16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -162,6 +184,21 @@
   function normalizeCategory(category) {
     if (CATEGORIES.some((item) => item.key === category)) return category;
     return "technical";
+  }
+  function getBodyGradient(category) {
+    const colors = BODY_GRADIENT_COLORS[category];
+    return {
+      type: "gradient-linear",
+      gradientHandlePositions: [
+        { x: 0.5, y: 0 },
+        { x: 0.5, y: 1 },
+        { x: 1, y: 0 }
+      ],
+      gradientStops: [
+        { position: 0, color: colors.top },
+        { position: 1, color: colors.bottom }
+      ]
+    };
   }
   function gregorianToJalali(gy, gm, gd) {
     const gDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -487,6 +524,10 @@
     const metaSize = scaleValue(10, scale);
     const tagSize = scaleValue(8, scale);
     const stroke = singleTextMode ? "#000000" : category.color;
+    const cardRadius = scaleValue(16, scale);
+    const bodyInset = scaleValue(4, scale);
+    const contentInset = scaleValue(12, scale);
+    const headerRadius = Math.max(0, cardRadius - bodyInset);
     const legEdgeOffset = scaleValue(28, scale);
     const sideLegPadding = legPosition === "start" ? { top: legEdgeOffset, right: 0, bottom: 0, left: 0 } : legPosition === "end" ? { top: 0, right: 0, bottom: legEdgeOffset, left: 0 } : { top: 0, right: 0, bottom: 0, left: 0 };
     const verticalLegPadding = legPosition === "start" ? { top: 0, right: 0, bottom: 0, left: legEdgeOffset } : legPosition === "end" ? { top: 0, right: legEdgeOffset, bottom: 0, left: 0 } : { top: 0, right: 0, bottom: 0, left: 0 };
@@ -495,10 +536,10 @@
       {
         direction: "vertical",
         width: "fill-parent",
-        padding,
+        padding: bodyInset,
         spacing: scaleValue(12, scale),
-        cornerRadius: scaleValue(16, scale),
-        fill: "#FFFFFF",
+        cornerRadius: cardRadius,
+        fill: getBodyGradient(note.category),
         effect: {
           type: "drop-shadow",
           color: { r: 0, g: 0, b: 0, a: 0.2 },
@@ -513,7 +554,15 @@
           direction: "horizontal",
           width: "fill-parent",
           verticalAlignItems: "center",
-          spacing: scaleValue(8, scale)
+          spacing: scaleValue(8, scale),
+          padding: {
+            top: scaleValue(9, scale),
+            right: scaleValue(16, scale),
+            bottom: scaleValue(9, scale),
+            left: scaleValue(16, scale)
+          },
+          cornerRadius: headerRadius,
+          fill: "#FFF9F7"
         },
         /* @__PURE__ */ figma.widget.h(
           AutoLayout,
@@ -617,53 +666,68 @@
           )
         ))
       ),
-      !singleTextMode && !hideHeader && /* @__PURE__ */ figma.widget.h(Frame, { width: "fill-parent", height: 1, fill: "#E5E7EB" }),
-      /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", width: "fill-parent", spacing: scaleValue(8, scale), horizontalAlignItems: "end" }, !singleTextMode && !hideTitle && /* @__PURE__ */ figma.widget.h(
-        Input,
+      /* @__PURE__ */ figma.widget.h(
+        AutoLayout,
         {
-          value: title,
-          placeholder: "\u0639\u0646\u0648\u0627\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
-          font: TITLE_FONT,
-          fontFamily: NOTE_FONT_FAMILY,
-          fontSize: titleSize,
-          fontWeight: TITLE_FONT_WEIGHT,
-          fill: title ? "#24292F" : PLACEHOLDER_FILL,
+          direction: "vertical",
           width: "fill-parent",
-          horizontalAlignText: "right",
-          inputBehavior: "wrap",
-          placeholderProps: {
+          spacing: scaleValue(8, scale),
+          padding: {
+            top: !singleTextMode && !hideHeader ? 0 : contentInset,
+            right: contentInset,
+            bottom: contentInset,
+            left: contentInset
+          },
+          horizontalAlignItems: "end"
+        },
+        !singleTextMode && !hideTitle && /* @__PURE__ */ figma.widget.h(
+          Input,
+          {
+            value: title,
+            placeholder: "\u0639\u0646\u0648\u0627\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
             font: TITLE_FONT,
-            fill: PLACEHOLDER_FILL,
             fontFamily: NOTE_FONT_FAMILY,
             fontSize: titleSize,
-            fontWeight: TITLE_FONT_WEIGHT
-          },
-          onTextEditEnd: (event) => onTitleChange(event.characters)
-        }
-      ), /* @__PURE__ */ figma.widget.h(
-        Input,
-        {
-          value: body,
-          placeholder: "\u0645\u062A\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
-          font: BODY_FONT,
-          fontFamily: NOTE_FONT_FAMILY,
-          fontSize: bodySize,
-          fontWeight: BODY_FONT_WEIGHT,
-          lineHeight: scaleValue(21, scale),
-          fill: body ? "#4B5563" : PLACEHOLDER_FILL,
-          width: "fill-parent",
-          horizontalAlignText: "right",
-          inputBehavior: "multiline",
-          placeholderProps: {
+            fontWeight: TITLE_FONT_WEIGHT,
+            fill: title ? "#24292F" : PLACEHOLDER_FILL,
+            width: "fill-parent",
+            horizontalAlignText: "right",
+            inputBehavior: "wrap",
+            placeholderProps: {
+              font: TITLE_FONT,
+              fill: PLACEHOLDER_FILL,
+              fontFamily: NOTE_FONT_FAMILY,
+              fontSize: titleSize,
+              fontWeight: TITLE_FONT_WEIGHT
+            },
+            onTextEditEnd: (event) => onTitleChange(event.characters)
+          }
+        ),
+        /* @__PURE__ */ figma.widget.h(
+          Input,
+          {
+            value: body,
+            placeholder: "\u0645\u062A\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
             font: BODY_FONT,
-            fill: PLACEHOLDER_FILL,
             fontFamily: NOTE_FONT_FAMILY,
             fontSize: bodySize,
-            fontWeight: BODY_FONT_WEIGHT
-          },
-          onTextEditEnd: (event) => onBodyChange(event.characters)
-        }
-      )),
+            fontWeight: BODY_FONT_WEIGHT,
+            lineHeight: scaleValue(21, scale),
+            fill: body ? "#4B5563" : PLACEHOLDER_FILL,
+            width: "fill-parent",
+            horizontalAlignText: "right",
+            inputBehavior: "multiline",
+            placeholderProps: {
+              font: BODY_FONT,
+              fill: PLACEHOLDER_FILL,
+              fontFamily: NOTE_FONT_FAMILY,
+              fontSize: bodySize,
+              fontWeight: BODY_FONT_WEIGHT
+            },
+            onTextEditEnd: (event) => onBodyChange(event.characters)
+          }
+        )
+      ),
       !singleTextMode && links.length > 0 && /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", width: "fill-parent", spacing: scaleValue(12, scale), horizontalAlignItems: "end" }, /* @__PURE__ */ figma.widget.h(Frame, { width: "fill-parent", height: 1, fill: "#E5E7EB" }), /* @__PURE__ */ figma.widget.h(
         AutoLayout,
         {
