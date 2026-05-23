@@ -80,8 +80,8 @@ const CATEGORIES: Array<{
 }> = [
   { key: "technical", label: "فنی", color: "#329546" },
   { key: "design", label: "دیزاین", color: "#2B52D4" },
-  { key: "business", label: "بیزینس", color: "#D42525" },
-  { key: "design_changes", label: "تغییرات دیزاینی", color: "#9218B3" },
+  { key: "business", label: "بیزینس", color: "#9218B3" },
+  { key: "design_changes", label: "تغییرات دیزاینی", color: "#D42525" },
   { key: "feedback", label: "فیدبک", color: "#E0A011" }
 ];
 
@@ -139,12 +139,12 @@ const BODY_GRADIENT_COLORS: Record<CategoryKey, { top: WidgetJSX.Color; bottom: 
     bottom: { r: 224 / 255, g: 232 / 255, b: 255 / 255, a: 1 }
   },
   business: {
-    top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
-    bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
-  },
-  design_changes: {
     top: { r: 254 / 255, g: 250 / 255, b: 255 / 255, a: 1 },
     bottom: { r: 242 / 255, g: 219 / 255, b: 249 / 255, a: 1 }
+  },
+  design_changes: {
+    top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
+    bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
   },
   feedback: {
     top: { r: 255 / 255, g: 253 / 255, b: 247 / 255, a: 1 },

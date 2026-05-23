@@ -72,8 +72,8 @@
   var CATEGORIES = [
     { key: "technical", label: "\u0641\u0646\u06CC", color: "#329546" },
     { key: "design", label: "\u062F\u06CC\u0632\u0627\u06CC\u0646", color: "#2B52D4" },
-    { key: "business", label: "\u0628\u06CC\u0632\u06CC\u0646\u0633", color: "#D42525" },
-    { key: "design_changes", label: "\u062A\u063A\u06CC\u06CC\u0631\u0627\u062A \u062F\u06CC\u0632\u0627\u06CC\u0646\u06CC", color: "#9218B3" },
+    { key: "business", label: "\u0628\u06CC\u0632\u06CC\u0646\u0633", color: "#9218B3" },
+    { key: "design_changes", label: "\u062A\u063A\u06CC\u06CC\u0631\u0627\u062A \u062F\u06CC\u0632\u0627\u06CC\u0646\u06CC", color: "#D42525" },
     { key: "feedback", label: "\u0641\u06CC\u062F\u0628\u06A9", color: "#E0A011" }
   ];
   var LEG_SIDE_OPTIONS = [
@@ -123,12 +123,12 @@
       bottom: { r: 224 / 255, g: 232 / 255, b: 255 / 255, a: 1 }
     },
     business: {
-      top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
-      bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
-    },
-    design_changes: {
       top: { r: 254 / 255, g: 250 / 255, b: 255 / 255, a: 1 },
       bottom: { r: 242 / 255, g: 219 / 255, b: 249 / 255, a: 1 }
+    },
+    design_changes: {
+      top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
+      bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
     },
     feedback: {
       top: { r: 255 / 255, g: 253 / 255, b: 247 / 255, a: 1 },
