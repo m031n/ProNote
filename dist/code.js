@@ -56,7 +56,18 @@
     useWidgetId,
     waitForTask
   } = widget;
-  var SCALE_STEPS = [0.6, 0.72, 0.84, 0.96, 1.08, 1.2, 1.36, 1.52, 1.68];
+  var SCALE_STEPS = [0.6, 0.72, 0.84, 1, 1.36, 1.52, 1.68];
+  var SCALE_INDEX_MIGRATION = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 3,
+    5: 4,
+    6: 4,
+    7: 5,
+    8: 6
+  };
   var NOTE_FONT_FAMILY = "IRANSansXVF";
   var TITLE_FONT_WEIGHT = 700;
   var BODY_FONT_WEIGHT = 500;
@@ -64,17 +75,13 @@
   var BODY_FONT = { family: NOTE_FONT_FAMILY, style: "Medium" };
   var META_BOLD_FONT = { family: NOTE_FONT_FAMILY, style: "Bold" };
   var META_MEDIUM_FONT = { family: NOTE_FONT_FAMILY, style: "Medium" };
-  var PLACEHOLDER_FILL = {
-    type: "solid",
-    color: { r: 160 / 255, g: 166 / 255, b: 178 / 255, a: 1 },
-    opacity: 1
-  };
+  var FOOTER_META_FONT = { family: "Inter", style: "Medium" };
   var CATEGORIES = [
-    { key: "technical", label: "\u0641\u0646\u06CC", color: "#329546" },
-    { key: "design", label: "\u062F\u06CC\u0632\u0627\u06CC\u0646", color: "#2B52D4" },
-    { key: "business", label: "\u0628\u06CC\u0632\u06CC\u0646\u0633", color: "#9218B3" },
-    { key: "design_changes", label: "\u062A\u063A\u06CC\u06CC\u0631\u0627\u062A \u062F\u06CC\u0632\u0627\u06CC\u0646\u06CC", color: "#D42525" },
-    { key: "feedback", label: "\u0641\u06CC\u062F\u0628\u06A9", color: "#E0A011" }
+    { key: "business", label: "\u0628\u06CC\u0632\u06CC\u0646\u0633", color: "#815AAD" },
+    { key: "design", label: "\u062F\u06CC\u0632\u0627\u06CC\u0646", color: "#3286B4" },
+    { key: "design_changes", label: "\u062A\u063A\u06CC\u06CC\u0631\u0627\u062A \u062F\u06CC\u0632\u0627\u06CC\u0646", color: "#00915C" },
+    { key: "technical", label: "\u0641\u0646\u06CC", color: "#D77925" },
+    { key: "feedback", label: "\u0641\u06CC\u062F\u0628\u06A9", color: "#C73D43" }
   ];
   var LEG_SIDE_OPTIONS = [
     { option: "left", label: "Left" },
@@ -99,50 +106,57 @@
     { option: "end", label: "Right" }
   ];
   var LEG_LENGTHS = {
-    small: 104,
+    small: 112,
     medium: 208,
     long: 416
   };
-  var CARD_WIDTH_OPTIONS = [
-    { option: "small", label: "Small" },
-    { option: "medium", label: "Medium" },
-    { option: "large", label: "Large" }
-  ];
   var CARD_WIDTHS = {
-    small: 300,
+    small: 310,
     medium: 500,
     large: 700
   };
-  var BODY_GRADIENT_COLORS = {
+  var CATEGORY_THEME = {
     technical: {
-      top: { r: 251 / 255, g: 255 / 255, b: 252 / 255, a: 1 },
-      bottom: { r: 218 / 255, g: 246 / 255, b: 225 / 255, a: 1 }
+      bg: "#FFEACD",
+      text: "#834301",
+      secondaryText: "#A97547",
+      linkText: "#FF6700"
     },
     design: {
-      top: { r: 250 / 255, g: 252 / 255, b: 255 / 255, a: 1 },
-      bottom: { r: 224 / 255, g: 232 / 255, b: 255 / 255, a: 1 }
+      bg: "#D5ECF8",
+      text: "#004D71",
+      secondaryText: "#4A7D9A",
+      linkText: "#0072E9"
     },
     business: {
-      top: { r: 254 / 255, g: 250 / 255, b: 255 / 255, a: 1 },
-      bottom: { r: 242 / 255, g: 219 / 255, b: 249 / 255, a: 1 }
+      bg: "#EFE4FA",
+      text: "#412069",
+      secondaryText: "#755B96",
+      linkText: "#8A29F1"
     },
     design_changes: {
-      top: { r: 255 / 255, g: 250 / 255, b: 250 / 255, a: 1 },
-      bottom: { r: 250 / 255, g: 207 / 255, b: 214 / 255, a: 1 }
+      bg: "#D5F0E3",
+      text: "#005333",
+      secondaryText: "#498268",
+      linkText: "#00AA2E"
     },
     feedback: {
-      top: { r: 255 / 255, g: 253 / 255, b: 247 / 255, a: 1 },
-      bottom: { r: 255 / 255, g: 239 / 255, b: 199 / 255, a: 1 }
+      bg: "#FFDEDD",
+      text: "#74181C",
+      secondaryText: "#A25659",
+      linkText: "#FC0022"
     }
   };
   var MENU_ICONS = {
-    simpleAdvanced: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22V16M9 19L12 22L15 19M12 8V2M9 5L12 2L15 5M4 12H2M10 12H8M16 12H14M22 12H20" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    addLink: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 17H7C5.67392 17 4.40215 16.4732 3.46447 15.5355C2.52678 14.5979 2 13.3261 2 12C2 10.6739 2.52678 9.40215 3.46447 8.46447C4.40215 7.52678 5.67392 7 7 7H9M15 7H17C18.3261 7 19.5979 7.52678 20.5355 8.46447C21.4732 9.40215 22 10.6739 22 12C22 13.3261 21.4732 14.5979 20.5355 15.5355C19.5979 16.4732 18.3261 17 17 17H15M8 12H16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    hideHeader: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 20.662V19C7 18.4696 7.21071 17.9609 7.58579 17.5858C7.96086 17.2107 8.46957 17 9 17H15C15.5304 17 16.0391 17.2107 16.4142 17.5858C16.7893 17.9609 17 18.4696 17 19V20.662M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    simpleAdvanced: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.25 20V18.75H3C2.58579 18.75 2.25 18.4142 2.25 18C2.25 17.5858 2.58579 17.25 3 17.25H4.25V16C4.25 15.5858 4.58579 15.25 5 15.25C5.41421 15.25 5.75 15.5858 5.75 16V17.25H7C7.41421 17.25 7.75 17.5858 7.75 18C7.75 18.4142 7.41421 18.75 7 18.75H5.75V20C5.75 20.4142 5.41421 20.75 5 20.75C4.58579 20.75 4.25 20.4142 4.25 20ZM13 3.25C13.3079 3.25 13.5842 3.43828 13.6973 3.72461L15.4502 8.16895C15.6516 8.6797 15.7109 8.81493 15.7881 8.92285C15.8678 9.03414 15.9659 9.13221 16.0771 9.21191C16.1851 9.28912 16.3203 9.34836 16.8311 9.5498L21.2754 11.3027C21.5617 11.4158 21.75 11.6921 21.75 12C21.75 12.3079 21.5617 12.5842 21.2754 12.6973L16.8311 14.4502C16.3203 14.6516 16.1851 14.7109 16.0771 14.7881C15.9659 14.8678 15.8678 14.9659 15.7881 15.0771C15.7109 15.1851 15.6516 15.3203 15.4502 15.8311L13.6973 20.2754C13.5842 20.5617 13.3079 20.75 13 20.75C12.6921 20.75 12.4158 20.5617 12.3027 20.2754L10.5498 15.8311C10.3484 15.3203 10.2891 15.1851 10.2119 15.0771C10.1322 14.9659 10.0341 14.8678 9.92285 14.7881C9.81492 14.7109 9.6797 14.6516 9.16895 14.4502L4.72461 12.6973C4.43828 12.5842 4.25 12.3079 4.25 12C4.25 11.6921 4.43828 11.4158 4.72461 11.3027L9.16895 9.5498C9.67971 9.34836 9.81493 9.28912 9.92285 9.21191C10.0341 9.13221 10.1322 9.03414 10.2119 8.92285C10.2891 8.81493 10.3484 8.67971 10.5498 8.16895L12.3027 3.72461L12.3525 3.62207C12.4854 3.39423 12.7306 3.25 13 3.25ZM11.9453 8.71973C11.7712 9.16126 11.642 9.50312 11.4316 9.79688C11.2563 10.0417 11.0417 10.2563 10.7969 10.4316C10.5031 10.642 10.1613 10.7712 9.71973 10.9453L7.04395 12L9.71973 13.0547C10.1613 13.2288 10.5031 13.358 10.7969 13.5684C11.0417 13.7437 11.2563 13.9583 11.4316 14.2031C11.642 14.4969 11.7712 14.8387 11.9453 15.2803L13 17.9551L14.0547 15.2803C14.2288 14.8387 14.358 14.4969 14.5684 14.2031C14.7437 13.9583 14.9583 13.7437 15.2031 13.5684C15.4969 13.358 15.8387 13.2288 16.2803 13.0547L18.9551 12L16.2803 10.9453C15.8387 10.7712 15.4969 10.642 15.2031 10.4316C14.9583 10.2563 14.7437 10.0417 14.5684 9.79688C14.358 9.50312 14.2288 9.16126 14.0547 8.71973L13 6.04395L11.9453 8.71973ZM5.25 8V6.75H4C3.58579 6.75 3.25 6.41421 3.25 6C3.25 5.58579 3.58579 5.25 4 5.25H5.25V4C5.25 3.58579 5.58579 3.25 6 3.25C6.41421 3.25 6.75 3.58579 6.75 4V5.25H8C8.41421 5.25 8.75 5.58579 8.75 6C8.75 6.41421 8.41421 6.75 8 6.75H6.75V8C6.75 8.41421 6.41421 8.75 6 8.75C5.58579 8.75 5.25 8.41421 5.25 8Z" fill="#FFFFFF"/></svg>',
     hideTitle: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 16L17.536 8.672C17.6053 8.47151 17.7354 8.29762 17.9082 8.17454C18.081 8.05147 18.2879 7.98532 18.5 7.98532C18.7121 7.98532 18.919 8.05147 19.0918 8.17454C19.2646 8.29762 19.3947 8.47151 19.464 8.672L22 16M15.697 14H21.303M2 16L6.039 6.31C6.07698 6.2189 6.14107 6.14109 6.22319 6.08635C6.30532 6.03161 6.4018 6.0024 6.5005 6.0024C6.5992 6.0024 6.69568 6.03161 6.77781 6.08635C6.85993 6.14109 6.92402 6.2189 6.962 6.31L11 16M3.304 13H9.696" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    scaleDown: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21L16.65 16.65M8 11H14M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    scaleUp: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21L16.65 16.65M11 8V14M8 11H14M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    newNote: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#FFFFFF" stroke-width="2"/><path d="M12 8V16M8 12H16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>'
+    scaleDown: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10.5C17.25 6.77208 14.2279 3.75 10.5 3.75C6.77208 3.75 3.75 6.77208 3.75 10.5C3.75 14.2279 6.77208 17.25 10.5 17.25C12.3642 17.25 14.0511 16.4958 15.2734 15.2734C16.4958 14.0511 17.25 12.3642 17.25 10.5ZM13.5 9.75C13.9142 9.75 14.25 10.0858 14.25 10.5C14.25 10.9142 13.9142 11.25 13.5 11.25H7.5C7.08579 11.25 6.75 10.9142 6.75 10.5C6.75 10.0858 7.08579 9.75 7.5 9.75H13.5ZM18.75 10.5C18.75 12.5078 18.0309 14.3481 16.8389 15.7783L21.5303 20.4697C21.8232 20.7626 21.8232 21.2374 21.5303 21.5303C21.2374 21.8232 20.7626 21.8232 20.4697 21.5303L15.7783 16.8389C14.3481 18.0309 12.5078 18.75 10.5 18.75C5.94365 18.75 2.25 15.0563 2.25 10.5C2.25 5.94365 5.94365 2.25 10.5 2.25C15.0563 2.25 18.75 5.94365 18.75 10.5Z" fill="#FFFFFF"/></svg>',
+    scaleUp: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10.5C17.25 6.77208 14.2279 3.75 10.5 3.75C6.77208 3.75 3.75 6.77208 3.75 10.5C3.75 14.2279 6.77208 17.25 10.5 17.25C14.2279 17.25 17.25 14.2279 17.25 10.5ZM9.75 13.5V11.25H7.5C7.08579 11.25 6.75 10.9142 6.75 10.5C6.75 10.0858 7.08579 9.75 7.5 9.75H9.75V7.5C9.75 7.08579 10.0858 6.75 10.5 6.75C10.9142 6.75 11.25 7.08579 11.25 7.5V9.75H13.5C13.9142 9.75 14.25 10.0858 14.25 10.5C14.25 10.9142 13.9142 11.25 13.5 11.25H11.25V13.5C11.25 13.9142 10.9142 14.25 10.5 14.25C10.0858 14.25 9.75 13.9142 9.75 13.5ZM18.75 10.5C18.75 12.5071 18.0323 14.3461 16.8408 15.7764L21.5303 20.4697C21.823 20.7627 21.8231 21.2375 21.5303 21.5303C21.2373 21.823 20.7625 21.8231 20.4697 21.5303L15.7803 16.8369C14.3494 18.0305 12.5091 18.75 10.5 18.75C5.94365 18.75 2.25 15.0563 2.25 10.5C2.25 5.94365 5.94365 2.25 10.5 2.25C15.0563 2.25 18.75 5.94365 18.75 10.5Z" fill="#FFFFFF"/></svg>',
+    cardSmall: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><text x="9" y="12.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">S</text></svg>',
+    cardMedium: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><text x="9" y="12.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">M</text></svg>',
+    cardLarge: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><text x="9" y="12.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">L</text></svg>',
+    allNotes: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.25 7.2002C19.25 6.62777 19.2498 6.24315 19.2256 5.94727C19.2021 5.66027 19.1594 5.52316 19.1133 5.43262C18.9935 5.19751 18.8025 5.00655 18.5674 4.88672C18.4768 4.84059 18.3397 4.79788 18.0527 4.77442C17.7569 4.75024 17.3722 4.75 16.7998 4.75H7.2002C6.62777 4.75 6.24315 4.75024 5.94727 4.77442C5.66027 4.79788 5.52316 4.84059 5.43262 4.88672C5.19751 5.00655 5.00655 5.19751 4.88672 5.43262C4.84059 5.52316 4.79788 5.66027 4.77442 5.94727C4.75024 6.24315 4.75 6.62777 4.75 7.2002V16.7998C4.75 17.3722 4.75024 17.7569 4.77442 18.0527C4.79788 18.3397 4.84059 18.4768 4.88672 18.5674C5.00655 18.8025 5.19751 18.9935 5.43262 19.1133C5.52316 19.1594 5.66027 19.2021 5.94727 19.2256C6.24315 19.2498 6.62777 19.25 7.2002 19.25H16.7998C17.3722 19.25 17.7569 19.2498 18.0527 19.2256C18.3397 19.2021 18.4768 19.1594 18.5674 19.1133C18.8025 18.9935 18.9935 18.8025 19.1133 18.5674C19.1594 18.4768 19.2021 18.3397 19.2256 18.0527C19.2498 17.7569 19.25 17.3722 19.25 16.7998V7.2002ZM16 15.251C16.4142 15.251 16.75 15.5868 16.75 16.001C16.7498 16.415 16.4141 16.751 16 16.751L11 16.75C10.5858 16.75 10.25 16.4142 10.25 16C10.25 15.5858 10.5858 15.25 11 15.25L16 15.251ZM8.00977 15.25C8.42398 15.25 8.75977 15.5858 8.75977 16C8.75977 16.4142 8.42398 16.75 8.00977 16.75H8C7.58579 16.75 7.25 16.4142 7.25 16C7.25 15.5858 7.58579 15.25 8 15.25H8.00977ZM16 11.251C16.4142 11.251 16.75 11.5868 16.75 12.001C16.7498 12.415 16.4141 12.751 16 12.751L11 12.75C10.5858 12.75 10.25 12.4142 10.25 12C10.25 11.5858 10.5858 11.25 11 11.25L16 11.251ZM8.00977 11.25C8.42398 11.25 8.75977 11.5858 8.75977 12C8.75977 12.4142 8.42398 12.75 8.00977 12.75H8C7.58579 12.75 7.25 12.4142 7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H8.00977ZM16 7.25098C16.4142 7.25103 16.75 7.58677 16.75 8.00098C16.7498 8.415 16.4141 8.75098 16 8.75098L11 8.75C10.5858 8.74996 10.25 8.41418 10.25 8C10.25 7.58582 10.5858 7.25 11 7.25L16 7.25098ZM8.00977 7.25C8.42398 7.25 8.75977 7.58579 8.75977 8C8.75977 8.41422 8.42398 8.75 8.00977 8.75H8C7.58579 8.75 7.25 8.41422 7.25 8C7.25 7.58579 7.58579 7.25 8 7.25H8.00977ZM20.75 16.7998C20.75 17.3475 20.751 17.8037 20.7207 18.1748C20.6897 18.5545 20.6219 18.9109 20.4502 19.2481C20.1865 19.7655 19.7655 20.1865 19.2481 20.4502C18.9109 20.6219 18.5545 20.6897 18.1748 20.7207C17.8037 20.751 17.3475 20.75 16.7998 20.75H7.2002C6.65252 20.75 6.19633 20.751 5.8252 20.7207C5.44547 20.6897 5.0891 20.6219 4.75196 20.4502C4.23451 20.1865 3.81346 19.7655 3.54981 19.2481C3.3781 18.9109 3.31033 18.5545 3.2793 18.1748C3.24898 17.8037 3.25 17.3475 3.25 16.7998V7.2002C3.25 6.65252 3.24898 6.19633 3.2793 5.8252C3.31033 5.44547 3.3781 5.0891 3.54981 4.75196C3.81346 4.23451 4.23451 3.81346 4.75196 3.54981C5.0891 3.3781 5.44547 3.31033 5.8252 3.2793C6.19633 3.24898 6.65252 3.25 7.2002 3.25H16.7998C17.3475 3.25 17.8037 3.24898 18.1748 3.2793C18.5545 3.31033 18.9109 3.3781 19.2481 3.54981C19.7655 3.81346 20.1865 4.23451 20.4502 4.75196C20.6219 5.0891 20.6897 5.44547 20.7207 5.8252C20.751 6.19633 20.75 6.65252 20.75 7.2002V16.7998Z" fill="#FFFFFF"/></svg>',
+    newNote: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.6113 20.0928C14.0175 20.0127 14.4118 20.2774 14.4922 20.6836C14.5723 21.0897 14.3084 21.484 13.9023 21.5645C13.2866 21.6863 12.6502 21.75 12 21.75C11.3498 21.75 10.7134 21.6863 10.0977 21.5645C9.69164 21.484 9.42772 21.0897 9.50781 20.6836C9.58817 20.2774 9.98249 20.0127 10.3887 20.0928C10.9091 20.1957 11.4481 20.25 12 20.25C12.5519 20.25 13.0909 20.1957 13.6113 20.0928Z" fill="#FFFFFF"/><path d="M4.09863 16.377C4.44268 16.1467 4.90817 16.2392 5.13867 16.583C5.74121 17.483 6.51699 18.2588 7.41699 18.8613C7.7608 19.0918 7.85327 19.5573 7.62305 19.9014C7.39261 20.2456 6.92623 20.3379 6.58203 20.1074C5.51916 19.3958 4.60416 18.4808 3.89258 17.418C3.66214 17.0738 3.75443 16.6074 4.09863 16.377Z" fill="#FFFFFF"/><path d="M18.8613 16.583C19.0918 16.2392 19.5573 16.1467 19.9014 16.377C20.2456 16.6074 20.3379 17.0738 20.1074 17.418C19.3958 18.4808 18.4808 19.3958 17.418 20.1074C17.0738 20.3379 16.6074 20.2456 16.377 19.9014C16.1467 19.5573 16.2392 19.0918 16.583 18.8613C17.483 18.2588 18.2588 17.483 18.8613 16.583Z" fill="#FFFFFF"/><path d="M12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V11.25H16C16.4142 11.25 16.75 11.5858 16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H12.75V16C12.75 16.4142 12.4142 16.75 12 16.75C11.5858 16.75 11.25 16.4142 11.25 16V12.75H8C7.58579 12.75 7.25 12.4142 7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H11.25V8C11.25 7.58579 11.5858 7.25 12 7.25Z" fill="#FFFFFF"/><path d="M2.43555 10.0977C2.51605 9.69164 2.91033 9.42772 3.31641 9.50781C3.7226 9.58817 3.98734 9.98249 3.90723 10.3887C3.80427 10.9091 3.75 11.4481 3.75 12C3.75 12.5519 3.80427 13.0909 3.90723 13.6113C3.98734 14.0175 3.7226 14.4118 3.31641 14.4922C2.91033 14.5723 2.51605 14.3084 2.43555 13.9023C2.31373 13.2866 2.25 12.6502 2.25 12C2.25 11.3498 2.31373 10.7134 2.43555 10.0977Z" fill="#FFFFFF"/><path d="M20.6836 9.50781C21.0897 9.42772 21.484 9.69164 21.5645 10.0977C21.6863 10.7134 21.75 11.3498 21.75 12C21.75 12.6502 21.6863 13.2866 21.5645 13.9023C21.484 14.3084 21.0897 14.5723 20.6836 14.4922C20.2774 14.4118 20.0127 14.0175 20.0928 13.6113C20.1957 13.0909 20.25 12.5519 20.25 12C20.25 11.4481 20.1957 10.9091 20.0928 10.3887C20.0127 9.98249 20.2774 9.58817 20.6836 9.50781Z" fill="#FFFFFF"/><path d="M6.58203 3.89258C6.92623 3.66214 7.39261 3.75443 7.62305 4.09863C7.85327 4.44268 7.7608 4.90817 7.41699 5.13867C6.51699 5.74121 5.74121 6.51699 5.13867 7.41699C4.90817 7.7608 4.44268 7.85327 4.09863 7.62305C3.75443 7.39261 3.66214 6.92623 3.89258 6.58203C4.60416 5.51916 5.51916 4.60416 6.58203 3.89258Z" fill="#FFFFFF"/><path d="M16.377 4.09863C16.6074 3.75443 17.0738 3.66214 17.418 3.89258C18.4808 4.60416 19.3958 5.51916 20.1074 6.58203C20.3379 6.92623 20.2456 7.39261 19.9014 7.62305C19.5573 7.85327 19.0918 7.7608 18.8613 7.41699C18.2588 6.51699 17.483 5.74121 16.583 5.13867C16.2392 4.90817 16.1467 4.44268 16.377 4.09863Z" fill="#FFFFFF"/><path d="M12 2.25C12.6502 2.25 13.2866 2.31373 13.9023 2.43555C14.3084 2.51605 14.5723 2.91033 14.4922 3.31641C14.4118 3.7226 14.0175 3.98734 13.6113 3.90723C13.0909 3.80427 12.5519 3.75 12 3.75C11.4481 3.75 10.9091 3.80427 10.3887 3.90723C9.98249 3.98733 9.58817 3.7226 9.50781 3.31641C9.42772 2.91033 9.69164 2.51605 10.0977 2.43555C10.7134 2.31373 11.3498 2.25 12 2.25Z" fill="#FFFFFF"/></svg>'
   };
   var EMPTY_NOTE = {
     title: "",
@@ -154,16 +168,30 @@
     updatedAt: ""
   };
   var AUTHOR_PROFILES = [
-    { id: "zahra", name: "Zahra", initials: "ZA", avatarFill: "#FCE7F3", avatarText: "#831843", avatarSrc: Zahra_default },
-    { id: "mahdi", name: "Mahdi", initials: "MA", avatarFill: "#DBEAFE", avatarText: "#1E3A8A", avatarSrc: Mahdi_default },
-    { id: "bahar", name: "Bahar", initials: "BA", avatarFill: "#DCFCE7", avatarText: "#14532D", avatarSrc: Bahar_default },
-    { id: "lida", name: "Lida", initials: "LI", avatarFill: "#FEF3C7", avatarText: "#78350F", avatarSrc: Lida_default },
-    { id: "moein", name: "Moein", initials: "MO", avatarFill: "#E0E7FF", avatarText: "#312E81", avatarSrc: Moein_default },
-    { id: "sajad", name: "Sajad", initials: "SA", avatarFill: "#FEE2E2", avatarText: "#7F1D1D", avatarSrc: Sajad_default },
-    { id: "hasan", name: "Hasan", initials: "HA", avatarFill: "#CCFBF1", avatarText: "#134E4A", avatarSrc: Hasan_default }
+    { id: "zahra", name: "\u0632\u0647\u0631\u0627", initials: "ZA", avatarFill: "#FCE7F3", avatarText: "#831843", avatarSrc: Zahra_default },
+    { id: "mahdi", name: "\u0645\u0647\u062F\u06CC", initials: "MA", avatarFill: "#DBEAFE", avatarText: "#1E3A8A", avatarSrc: Mahdi_default },
+    { id: "bahar", name: "\u0628\u0647\u0627\u0631", initials: "BA", avatarFill: "#DCFCE7", avatarText: "#14532D", avatarSrc: Bahar_default },
+    { id: "lida", name: "\u0644\u06CC\u062F\u0627", initials: "LI", avatarFill: "#FEF3C7", avatarText: "#78350F", avatarSrc: Lida_default },
+    { id: "moein", name: "\u0645\u0639\u06CC\u0646", initials: "MO", avatarFill: "#E0E7FF", avatarText: "#312E81", avatarSrc: Moein_default },
+    { id: "sajad", name: "\u0633\u062C\u0627\u062F", initials: "SA", avatarFill: "#FEE2E2", avatarText: "#7F1D1D", avatarSrc: Sajad_default },
+    { id: "hasan", name: "\u062D\u0633\u0646", initials: "HA", avatarFill: "#CCFBF1", avatarText: "#134E4A", avatarSrc: Hasan_default }
   ];
   function scaleValue(value, scale) {
     return Math.round(value * scale);
+  }
+  function hexToSolidPaint(hex, opacity = 1) {
+    const normalized = hex.replace("#", "");
+    const value = parseInt(normalized, 16);
+    return {
+      type: "solid",
+      color: {
+        r: (value >> 16 & 255) / 255,
+        g: (value >> 8 & 255) / 255,
+        b: (value & 255) / 255,
+        a: opacity
+      },
+      opacity: 1
+    };
   }
   function getCategory(key) {
     return CATEGORIES.find((item) => item.key === key) || CATEGORIES[CATEGORIES.length - 1];
@@ -184,21 +212,6 @@
   function normalizeCategory(category) {
     if (CATEGORIES.some((item) => item.key === category)) return category;
     return "technical";
-  }
-  function getBodyGradient(category) {
-    const colors = BODY_GRADIENT_COLORS[category];
-    return {
-      type: "gradient-linear",
-      gradientHandlePositions: [
-        { x: 0.5, y: 0 },
-        { x: 0.5, y: 1 },
-        { x: 1, y: 0 }
-      ],
-      gradientStops: [
-        { position: 0, color: colors.top },
-        { position: 1, color: colors.bottom }
-      ]
-    };
   }
   function gregorianToJalali(gy, gm, gd) {
     const gDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -243,22 +256,17 @@
     const jalaliDate = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
     return `${jalaliDate.year}/${toTwoDigit(jalaliDate.month)}/${toTwoDigit(jalaliDate.day)}`;
   }
-  function snapshotCurrentUser() {
-    const current = figma.currentUser;
-    if (!(current == null ? void 0 : current.name)) return null;
-    return { id: current.id || "", name: current.name };
-  }
-  function withDefaultAuthor(note, user) {
+  function withDefaultAuthor(note) {
     if (note.authorName) return normalizeAuthor(note);
-    const profile = findAuthorProfileByName((user == null ? void 0 : user.name) || "") || AUTHOR_PROFILES[0];
+    const profile = AUTHOR_PROFILES[0];
     return __spreadProps(__spreadValues({}, note), {
       authorId: profile.id,
       authorName: profile.name,
       updatedAt: note.updatedAt || (/* @__PURE__ */ new Date()).toISOString()
     });
   }
-  function displayAuthorName(note, user) {
-    return note.authorName || (user == null ? void 0 : user.name) || "";
+  function displayAuthorName(note) {
+    return note.authorName || "";
   }
   function findAuthorProfileById(id) {
     return AUTHOR_PROFILES.find((author) => author.id === id);
@@ -266,8 +274,8 @@
   function findAuthorProfileByName(name) {
     return AUTHOR_PROFILES.find((author) => author.name.toLowerCase() === name.trim().toLowerCase());
   }
-  function getAuthorProfile(note, user) {
-    return findAuthorProfileById(note.authorId) || findAuthorProfileByName(displayAuthorName(note, user)) || AUTHOR_PROFILES[0];
+  function getAuthorProfile(note) {
+    return findAuthorProfileById(note.authorId) || findAuthorProfileByName(displayAuthorName(note)) || AUTHOR_PROFILES[0];
   }
   function normalizeAuthor(note) {
     const profile = findAuthorProfileById(note.authorId) || findAuthorProfileByName(note.authorName);
@@ -290,12 +298,52 @@
       url: normalizeUrl(link.url)
     })).filter((link) => link.title && link.url);
   }
-  function openManageLinksModal(links, onSave) {
+  function normalizeFullEditPayload(payload) {
+    return {
+      title: payload.title,
+      body: payload.body,
+      category: normalizeCategory(payload.category),
+      authorId: payload.authorId,
+      links: normalizeLinks(payload.links)
+    };
+  }
+  function getNodePage(node) {
+    let parent = node.parent;
+    while (parent) {
+      if (parent.type === "PAGE") return parent;
+      parent = parent.parent;
+    }
+    return null;
+  }
+  function widgetNodeToNoteListItem(node) {
+    var _a;
+    const state = node.widgetSyncedState;
+    const noteState = state.note || {};
+    const categoryKey = normalizeCategory(noteState.category || "technical");
+    const category = getCategory(categoryKey);
+    const theme = CATEGORY_THEME[categoryKey];
+    const title = typeof state.title === "string" && state.title.trim() ? state.title.trim() : typeof noteState.title === "string" && noteState.title.trim() ? noteState.title.trim() : "Untitled";
+    const authorName = typeof noteState.authorName === "string" && noteState.authorName.trim() ? noteState.authorName.trim() : ((_a = findAuthorProfileById(noteState.authorId || "")) == null ? void 0 : _a.name) || AUTHOR_PROFILES[0].name;
+    const page = getNodePage(node);
+    return {
+      id: node.id,
+      title,
+      authorName,
+      pageName: (page == null ? void 0 : page.name) || "Page",
+      category: categoryKey,
+      categoryLabel: category.label,
+      categoryColor: category.color,
+      categoryBg: theme.bg,
+      categoryStatus: theme.linkText,
+      updatedLabel: formatUpdatedAt(noteState.updatedAt || "")
+    };
+  }
+  function openAllNotesModal(currentWidgetNodeId) {
     waitForTask(
       new Promise((resolve) => {
-        figma.showUI(__html__, { width: 520, height: 220, title: "\u0645\u062F\u06CC\u0631\u06CC\u062A \u0644\u06CC\u0646\u06A9\u200C\u0647\u0627" });
-        figma.ui.postMessage({ mode: "link", links });
-        figma.ui.onmessage = (message) => {
+        figma.showUI(__html__, { width: 450, height: 580, title: "All Notes" });
+        figma.ui.postMessage({ mode: "allNotes", notes: [], loading: true });
+        figma.ui.onmessage = async (message) => {
           if (message.type === "resize" && message.payload) {
             figma.ui.resize(message.payload.width, message.payload.height);
             return;
@@ -305,19 +353,46 @@
             resolve();
             return;
           }
-          if (message.type !== "saveLinks" || !message.payload) return;
-          const payload = message.payload;
-          onSave(normalizeLinks(payload.links));
+          if (message.type !== "selectNote" || !message.payload || !("nodeId" in message.payload)) return;
+          const node = await figma.getNodeByIdAsync(message.payload.nodeId || "");
+          if (!node || node.type !== "WIDGET") return;
+          const page = getNodePage(node);
+          if (page) await figma.setCurrentPageAsync(page);
+          figma.currentPage.selection = [node];
+          figma.viewport.scrollAndZoomIntoView([node]);
           figma.closePlugin();
           resolve();
         };
+        (async () => {
+          try {
+            await figma.loadAllPagesAsync();
+            const currentWidgetNode = await figma.getNodeByIdAsync(currentWidgetNodeId);
+            if (!currentWidgetNode || currentWidgetNode.type !== "WIDGET") {
+              figma.ui.postMessage({ mode: "allNotes", notes: [], error: "Could not find this widget." });
+              return;
+            }
+            const currentWidgetId = currentWidgetNode.widgetId;
+            const noteNodes = figma.root.findWidgetNodesByWidgetId(currentWidgetId).sort((a, b) => {
+              var _a, _b;
+              const pageA = ((_a = getNodePage(a)) == null ? void 0 : _a.name) || "";
+              const pageB = ((_b = getNodePage(b)) == null ? void 0 : _b.name) || "";
+              if (pageA !== pageB) return pageA.localeCompare(pageB);
+              return a.y - b.y || a.x - b.x;
+            });
+            const notes = noteNodes.map(widgetNodeToNoteListItem);
+            figma.ui.postMessage({ mode: "allNotes", notes });
+          } catch (error) {
+            const message = error instanceof Error ? error.message : "Could not load notes.";
+            figma.ui.postMessage({ mode: "allNotes", notes: [], error: message });
+          }
+        })();
       })
     );
   }
   function openCategoryModal(selectedCategory, onSave) {
     waitForTask(
       new Promise((resolve) => {
-        figma.showUI(__html__, { width: 320, height: 260, title: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0646\u0648\u0639" });
+        figma.showUI(__html__, { width: 216, height: 224, title: "Category" });
         figma.ui.postMessage({
           mode: "category",
           selectedCategory,
@@ -345,7 +420,7 @@
   function openAuthorModal(selectedAuthorId, onSave) {
     waitForTask(
       new Promise((resolve) => {
-        figma.showUI(__html__, { width: 320, height: 320, title: "\u0627\u0646\u062A\u062E\u0627\u0628 \u0646\u0648\u06CC\u0633\u0646\u062F\u0647" });
+        figma.showUI(__html__, { width: 216, height: 304, title: "Author" });
         figma.ui.postMessage({
           mode: "author",
           selectedAuthorId,
@@ -376,11 +451,13 @@
     category,
     authorId,
     links,
+    openLinkDialog = false,
+    onLive,
     onSave
   }) {
     waitForTask(
       new Promise((resolve) => {
-        figma.showUI(__html__, { width: 560, height: 720, title: "\u0648\u06CC\u0631\u0627\u06CC\u0634 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A" });
+        figma.showUI(__html__, { width: 450, height: 374, title: "Edit Note" });
         figma.ui.postMessage({
           mode: "fullEdit",
           title,
@@ -388,8 +465,9 @@
           category,
           authorId,
           links,
+          openLinkDialog,
           categories: CATEGORIES,
-          authors: AUTHOR_PROFILES.map(({ id, name }) => ({ id, name }))
+          authors: AUTHOR_PROFILES.map(({ id, name, initials, avatarFill, avatarSrc }) => ({ id, name, initials, avatarFill, avatarSrc }))
         });
         figma.ui.onmessage = (message) => {
           if (message.type === "resize" && message.payload) {
@@ -401,15 +479,12 @@
             resolve();
             return;
           }
+          if (message.type === "liveUpdate" && message.payload) {
+            onLive == null ? void 0 : onLive(normalizeFullEditPayload(message.payload));
+            return;
+          }
           if (message.type !== "saveNote" || !message.payload) return;
-          const payload = message.payload;
-          onSave({
-            title: payload.title,
-            body: payload.body,
-            category: normalizeCategory(payload.category),
-            authorId: payload.authorId,
-            links: normalizeLinks(payload.links)
-          });
+          onSave(normalizeFullEditPayload(message.payload));
           figma.closePlugin();
           resolve();
         };
@@ -425,7 +500,7 @@
     if (side === "none") return null;
     const lineLength = scaleValue(LEG_LENGTHS[length], scale);
     const thickness = Math.max(2, scaleValue(2, scale));
-    const dot = scaleValue(10, scale);
+    const dot = scaleValue(11, scale);
     const line = (width, height) => /* @__PURE__ */ figma.widget.h(Frame, { width, height, fill: stroke, cornerRadius: thickness / 2 });
     if (side === "left") {
       return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: 0, verticalAlignItems: "center" }, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: 0, verticalAlignItems: "center" }, /* @__PURE__ */ figma.widget.h(Frame, { width: dot, height: dot, cornerRadius: dot / 2, fill: stroke }), line(lineLength, thickness)));
@@ -444,7 +519,7 @@
       {
         width: size,
         height: size,
-        src: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 12 12" fill="none"><path d="M0.916711 1.7634C0.916711 1.34123 1.25847 0.99947 1.68064 0.99947H5.50027C5.75341 0.99947 5.95862 0.794257 5.95862 0.541114C5.95862 0.287971 5.75341 0.0827586 5.50026 0.0827586H1.68064C0.752184 0.0827586 0 0.834942 0 1.7634V10.3194C0 11.2478 0.752184 12 1.68064 12H10.2366C11.1651 12 11.9172 11.2478 11.9172 10.3194V6.49974C11.9172 6.24659 11.712 6.04138 11.4589 6.04138C11.2057 6.04138 11.0005 6.24659 11.0005 6.49974V10.3194C11.0005 10.7415 10.6588 11.0833 10.2366 11.0833H1.68064C1.25847 11.0833 0.916711 10.7415 0.916711 10.3194V1.7634Z" fill="${color}"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 0.346881C10.0549 -0.11558 9.27055 -0.115627 8.85127 0.34674L4.21146 4.9312L4.20847 4.93492C4.02948 5.15806 3.88965 5.43281 3.88965 5.75764V7.68495C3.88965 7.95164 4.10563 8.11034 4.31597 8.11034H6.2485C6.57516 8.11034 6.85285 7.96999 7.07983 7.74367L11.6782 3.20056L11.6812 3.19683C11.8602 2.9737 12 2.69895 12 2.37412C12 2.05652 11.9081 1.777 11.6751 1.5446L10.4741 0.346881ZM8.15137 2.17795L4.80386 5.51643C4.76581 5.55438 4.74058 5.58904 4.72439 5.62536C4.70837 5.66132 4.69935 5.70308 4.69935 5.75764V7.30239H6.2485C6.30329 7.30239 6.34525 7.29338 6.38138 7.27737C6.41785 7.2612 6.45262 7.23601 6.49067 7.19806L9.83236 3.86538L8.15137 2.17795ZM10.3958 3.3035L11.1287 2.5725C11.1668 2.53455 11.192 2.49989 11.2082 2.46357C11.2242 2.42762 11.2333 2.38585 11.2333 2.33129C11.2333 2.27674 11.2242 2.23497 11.2082 2.19902C11.192 2.1627 11.1668 2.12804 11.1287 2.09009L9.92628 0.890869C9.7868 0.751766 9.5814 0.751766 9.44193 0.890869L8.71477 1.61607L10.3958 3.3035Z" fill="${color}"/></svg>`
+        src: `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8Z" stroke="${color}" stroke-width="0.96" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.93666 8.98336C5.9602 8.86564 5.97198 8.80679 5.9935 8.75191C6.01261 8.70319 6.03739 8.6569 6.06732 8.61398C6.10104 8.56562 6.14349 8.52318 6.22837 8.4383L9 5.66667C9.36819 5.29848 9.96514 5.29848 10.3333 5.66667C10.7015 6.03486 10.7015 6.63181 10.3333 7L7.5617 9.77163C7.47682 9.85651 7.43438 9.89896 7.38602 9.93268C7.3431 9.96261 7.29681 9.98739 7.24809 10.0065C7.19321 10.028 7.13436 10.0398 7.01664 10.0633L5.66667 10.3333L5.93666 8.98336Z" stroke="${color}" stroke-width="0.96" stroke-linecap="round" stroke-linejoin="round"/></svg>`
       }
     );
   }
@@ -454,27 +529,30 @@
       {
         width: size,
         height: size,
-        src: `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 18 18" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.93962 1.38259C11.7841 -0.460786 14.7736 -0.46099 16.6174 1.38273C18.4607 3.22719 18.4611 6.21689 16.6174 8.06061L14.4784 10.1996C14.2099 10.4681 13.7745 10.4681 13.5059 10.1996C13.2374 9.93104 13.2374 9.49566 13.5059 9.22713L15.6449 7.08817C16.9514 5.78166 16.9516 3.66265 15.6448 2.35504C14.3383 1.04872 12.2195 1.04852 10.9119 2.35518L8.77296 4.49414C8.50442 4.76268 8.06905 4.76268 7.80051 4.49414C7.53198 4.22561 7.53198 3.79023 7.80051 3.5217L9.93962 1.38259Z" fill="${color}"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.3376 5.6625C12.6061 5.93103 12.6061 6.36641 12.3376 6.63495L6.63489 12.3376C6.36635 12.6062 5.93098 12.6062 5.66244 12.3376C5.39391 12.0691 5.39391 11.6337 5.66244 11.3652L11.3651 5.6625C11.6337 5.39397 12.069 5.39397 12.3376 5.6625Z" fill="${color}"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4.49407 7.80057C4.76261 8.0691 4.76261 8.50448 4.49407 8.77301L2.35511 10.912C1.04861 12.2185 1.0484 14.3375 2.35525 15.6451C3.66172 16.9514 5.78052 16.9516 7.0881 15.645L9.22706 13.506C9.49559 13.2375 9.93097 13.2375 10.1995 13.506C10.468 13.7745 10.468 14.2099 10.1995 14.4784L8.06054 16.6174C6.21609 18.4608 3.22639 18.4611 1.38266 16.6174C-0.460716 14.773 -0.461061 11.7833 1.38266 9.93953L3.52163 7.80057C3.79016 7.53204 4.22554 7.53204 4.49407 7.80057Z" fill="${color}"/></svg>`
+        src: `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.1 5.9L7.70004 5.29996C8.52851 4.47149 9.87174 4.47149 10.7002 5.29996C11.5287 6.12844 11.5287 7.47167 10.7002 8.30014L10.1002 8.90018M5.89993 7.10007L5.29989 7.70011C4.47142 8.52858 4.47142 9.87181 5.29989 10.7003C6.12837 11.5288 7.4716 11.5288 8.30007 10.7003L8.90011 10.1002M6.79998 9.2002L9.20012 6.80005M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8Z" stroke="${color}" stroke-width="0.96" stroke-linecap="round" stroke-linejoin="round"/></svg>`
       }
     );
   }
-  function LinkButton({ link, scale }) {
-    const iconSize = scaleValue(12, scale);
-    const fontSize = scaleValue(12, scale);
+  function LinkOutIcon({ color, size, opacity = 1 }) {
+    return /* @__PURE__ */ figma.widget.h(
+      SVG,
+      {
+        width: size,
+        height: size,
+        src: `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path opacity="${opacity}" d="M5.10558 5.10546C8.91319 1.29785 15.087 1.29785 18.8946 5.10546C22.7023 8.91308 22.7023 15.0869 18.8946 18.8945C16.5038 21.2853 13.1799 22.1739 10.0978 21.5635C9.69158 21.483 9.42771 21.0888 9.50793 20.6826C9.58838 20.2764 9.98258 20.0115 10.3888 20.0918C13.0009 20.6091 15.812 19.8561 17.8341 17.834C21.0559 14.6122 21.0559 9.38784 17.8341 6.16601C14.6123 2.94419 9.38795 2.94419 6.16613 6.16601C4.14404 8.1881 3.39098 10.9992 3.90832 13.6113C3.98859 14.0175 3.72371 14.4117 3.3175 14.4922C2.91132 14.5724 2.51708 14.3085 2.43664 13.9023C1.82625 10.8202 2.71477 7.49628 5.10558 5.10546ZM14.7501 15.6572C14.7499 16.0713 14.4142 16.4072 14.0001 16.4072C13.586 16.4072 13.2503 16.0713 13.2501 15.6572V11.8105L6.16613 18.8945C5.87321 19.1871 5.39838 19.1873 5.10558 18.8945C4.81279 18.6017 4.81299 18.1269 5.10558 17.834L12.1896 10.75H8.34289C7.92884 10.7498 7.59289 10.4141 7.59289 10C7.59289 9.58591 7.92884 9.2502 8.34289 9.25H14.0001C14.4143 9.25 14.7501 9.58578 14.7501 10V15.6572Z" fill="${color}"/></svg>`
+      }
+    );
+  }
+  function LinkButton({ link, scale, color }) {
+    const iconSize = scaleValue(16, scale);
+    const fontSize = scaleValue(14, scale);
     return /* @__PURE__ */ figma.widget.h(
       AutoLayout,
       {
         direction: "horizontal",
-        spacing: 4,
+        spacing: scaleValue(4, scale),
         verticalAlignItems: "center",
-        padding: {
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0
-        },
-        cornerRadius: 0,
-        horizontalAlignItems: "end",
+        horizontalAlignItems: "center",
         onClick: () => figma.openExternal(link.url)
       },
       /* @__PURE__ */ figma.widget.h(
@@ -485,17 +563,16 @@
           fontFamily: NOTE_FONT_FAMILY,
           fontSize,
           fontWeight: BODY_FONT_WEIGHT,
-          fill: "#149B57",
+          fill: color,
           horizontalAlignText: "right"
         },
         link.title
       ),
-      /* @__PURE__ */ figma.widget.h(LinkIcon, { color: "#149B57", size: iconSize })
+      /* @__PURE__ */ figma.widget.h(LinkOutIcon, { color, size: iconSize, opacity: 0.5 })
     );
   }
   function NoteCard({
     note,
-    currentUser,
     scale,
     cardWidth,
     legSide,
@@ -504,85 +581,268 @@
     title,
     body,
     links,
-    hideHeader,
     hideTitle,
     singleTextMode,
     onCategoryClick,
     onAuthorClick,
     onEditClick,
+    onLinksClick,
     onTitleChange,
     onBodyChange
   }) {
-    const author = getAuthorProfile(note, currentUser);
+    const author = getAuthorProfile(note);
     const authorLabel = author.name || "Select author";
     const category = getCategory(note.category);
+    const theme = CATEGORY_THEME[note.category];
     const width = scaleValue(CARD_WIDTHS[cardWidth], scale);
-    const padding = scaleValue(16, scale);
-    const colorPadding = scaleValue(8, scale);
-    const titleSize = scaleValue(18, scale);
-    const bodySize = scaleValue(14, scale);
+    const contentPadding = scaleValue(12, scale);
+    const titleSize = scaleValue(20, scale);
+    const bodySize = scaleValue(16, scale);
     const metaSize = scaleValue(10, scale);
-    const tagSize = scaleValue(8, scale);
+    const tagSize = scaleValue(10, scale);
     const stroke = singleTextMode ? "#000000" : category.color;
-    const cardRadius = scaleValue(16, scale);
-    const bodyInset = scaleValue(4, scale);
-    const contentInset = scaleValue(12, scale);
-    const headerRadius = Math.max(0, cardRadius - bodyInset);
+    const cardRadius = scaleValue(8, scale);
+    const simpleTextFill = "#111111";
+    const simplePlaceholderFill = hexToSolidPaint(simpleTextFill, 0.6);
+    const contentPlaceholderFill = hexToSolidPaint(theme.text, 0.6);
+    const iconHoverFill = hexToSolidPaint(theme.text, 0.15);
     const legEdgeOffset = scaleValue(28, scale);
     const sideLegPadding = legPosition === "start" ? { top: legEdgeOffset, right: 0, bottom: 0, left: 0 } : legPosition === "end" ? { top: 0, right: 0, bottom: legEdgeOffset, left: 0 } : { top: 0, right: 0, bottom: 0, left: 0 };
     const verticalLegPadding = legPosition === "start" ? { top: 0, right: 0, bottom: 0, left: legEdgeOffset } : legPosition === "end" ? { top: 0, right: legEdgeOffset, bottom: 0, left: 0 } : { top: 0, right: 0, bottom: 0, left: 0 };
-    const cardContent = /* @__PURE__ */ figma.widget.h(
+    const avatar = /* @__PURE__ */ figma.widget.h(
+      AutoLayout,
+      {
+        width: scaleValue(16, scale),
+        height: scaleValue(16, scale),
+        cornerRadius: scaleValue(9, scale),
+        fill: author.avatarFill,
+        horizontalAlignItems: "center",
+        verticalAlignItems: "center"
+      },
+      author.avatarSrc ? /* @__PURE__ */ figma.widget.h(
+        Image,
+        {
+          src: author.avatarSrc,
+          width: scaleValue(16, scale),
+          height: scaleValue(16, scale),
+          cornerRadius: scaleValue(9, scale)
+        }
+      ) : /* @__PURE__ */ figma.widget.h(
+        Text,
+        {
+          font: META_BOLD_FONT,
+          fontFamily: NOTE_FONT_FAMILY,
+          fontSize: scaleValue(8, scale),
+          fontWeight: 700,
+          fill: author.avatarText
+        },
+        author.initials
+      )
+    );
+    const simpleCard = /* @__PURE__ */ figma.widget.h(
       AutoLayout,
       {
         direction: "vertical",
-        width: "fill-parent",
-        padding: bodyInset,
-        spacing: scaleValue(12, scale),
+        width,
+        padding: contentPadding,
         cornerRadius: cardRadius,
-        fill: getBodyGradient(note.category),
-        effect: {
-          type: "drop-shadow",
-          color: { r: 0, g: 0, b: 0, a: 0.2 },
-          offset: { x: 0, y: scaleValue(4, scale) },
-          blur: scaleValue(15, scale)
-        },
+        stroke,
+        strokeWidth: scaleValue(2, scale),
+        fill: "#FFFFFF",
         horizontalAlignItems: "end"
       },
-      !singleTextMode && !hideHeader && /* @__PURE__ */ figma.widget.h(
+      /* @__PURE__ */ figma.widget.h(
+        Input,
+        {
+          value: body,
+          placeholder: "\u0645\u062A\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
+          font: BODY_FONT,
+          fontFamily: NOTE_FONT_FAMILY,
+          fontSize: bodySize,
+          fontWeight: BODY_FONT_WEIGHT,
+          lineHeight: scaleValue(24, scale),
+          fill: simpleTextFill,
+          width: "fill-parent",
+          horizontalAlignText: "right",
+          inputBehavior: "multiline",
+          placeholderProps: {
+            font: BODY_FONT,
+            fill: simplePlaceholderFill,
+            fontFamily: NOTE_FONT_FAMILY,
+            fontSize: bodySize,
+            fontWeight: BODY_FONT_WEIGHT,
+            opacity: 1
+          },
+          onTextEditEnd: (event) => onBodyChange(event.characters)
+        }
+      )
+    );
+    const fullCard = /* @__PURE__ */ figma.widget.h(
+      AutoLayout,
+      {
+        direction: "vertical",
+        width,
+        padding: contentPadding,
+        spacing: scaleValue(4, scale),
+        cornerRadius: cardRadius,
+        stroke,
+        strokeWidth: scaleValue(2, scale),
+        fill: theme.bg,
+        horizontalAlignItems: "end"
+      },
+      /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", width: "fill-parent", spacing: scaleValue(8, scale), horizontalAlignItems: "end" }, /* @__PURE__ */ figma.widget.h(
+        AutoLayout,
+        {
+          padding: {
+            top: scaleValue(2, scale),
+            right: scaleValue(12, scale),
+            bottom: scaleValue(2, scale),
+            left: scaleValue(12, scale)
+          },
+          cornerRadius: scaleValue(9, scale),
+          fill: category.color,
+          hoverStyle: { fill: category.color, opacity: 0.82 },
+          onClick: onCategoryClick
+        },
+        /* @__PURE__ */ figma.widget.h(
+          Text,
+          {
+            font: META_MEDIUM_FONT,
+            fontFamily: NOTE_FONT_FAMILY,
+            fontSize: tagSize,
+            fontWeight: BODY_FONT_WEIGHT,
+            fill: "#FFFFFF",
+            horizontalAlignText: "right"
+          },
+          category.label
+        )
+      ), !hideTitle && /* @__PURE__ */ figma.widget.h(
+        Input,
+        {
+          value: title,
+          placeholder: "\u0639\u0646\u0648\u0627\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
+          font: TITLE_FONT,
+          fontFamily: NOTE_FONT_FAMILY,
+          fontSize: titleSize,
+          fontWeight: TITLE_FONT_WEIGHT,
+          lineHeight: scaleValue(28, scale),
+          fill: theme.text,
+          width: "fill-parent",
+          horizontalAlignText: "right",
+          inputBehavior: "wrap",
+          placeholderProps: {
+            font: TITLE_FONT,
+            fill: contentPlaceholderFill,
+            fontFamily: NOTE_FONT_FAMILY,
+            fontSize: titleSize,
+            fontWeight: TITLE_FONT_WEIGHT,
+            opacity: 1
+          },
+          onTextEditEnd: (event) => onTitleChange(event.characters)
+        }
+      )),
+      /* @__PURE__ */ figma.widget.h(
+        AutoLayout,
+        {
+          direction: "vertical",
+          width: "fill-parent",
+          spacing: scaleValue(4, scale),
+          horizontalAlignItems: "end"
+        },
+        /* @__PURE__ */ figma.widget.h(
+          Input,
+          {
+            value: body,
+            placeholder: "\u0645\u062A\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
+            font: BODY_FONT,
+            fontFamily: NOTE_FONT_FAMILY,
+            fontSize: bodySize,
+            fontWeight: BODY_FONT_WEIGHT,
+            lineHeight: scaleValue(24, scale),
+            fill: theme.text,
+            width: "fill-parent",
+            horizontalAlignText: "right",
+            inputBehavior: "multiline",
+            placeholderProps: {
+              font: BODY_FONT,
+              fill: contentPlaceholderFill,
+              fontFamily: NOTE_FONT_FAMILY,
+              fontSize: bodySize,
+              fontWeight: BODY_FONT_WEIGHT,
+              opacity: 1
+            },
+            onTextEditEnd: (event) => onBodyChange(event.characters)
+          }
+        ),
+        links.length > 0 && /* @__PURE__ */ figma.widget.h(
+          AutoLayout,
+          {
+            direction: "horizontal",
+            width: "fill-parent",
+            wrap: true,
+            spacing: { horizontal: scaleValue(12, scale), vertical: scaleValue(12, scale) },
+            padding: { top: scaleValue(16, scale), right: 0, bottom: 0, left: 0 },
+            horizontalAlignItems: "end",
+            verticalAlignItems: "center"
+          },
+          [...links].reverse().map((link) => /* @__PURE__ */ figma.widget.h(LinkButton, { key: link.id, link, scale, color: theme.linkText }))
+        )
+      ),
+      /* @__PURE__ */ figma.widget.h(
         AutoLayout,
         {
           direction: "horizontal",
           width: "fill-parent",
-          verticalAlignItems: "center",
-          spacing: scaleValue(8, scale),
-          padding: {
-            top: scaleValue(9, scale),
-            right: scaleValue(16, scale),
-            bottom: scaleValue(9, scale),
-            left: scaleValue(16, scale)
-          },
-          cornerRadius: headerRadius,
-          fill: {
-            type: "solid",
-            color: "#FFFFFF",
-            opacity: 0.6
-          }
+          padding: { top: scaleValue(16, scale), right: 0, bottom: 0, left: 0 },
+          verticalAlignItems: "center"
         },
-        /* @__PURE__ */ figma.widget.h(
+        /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: scaleValue(4, scale), verticalAlignItems: "center" }, /* @__PURE__ */ figma.widget.h(
           AutoLayout,
           {
-            width: 16,
-            height: 16,
-            cornerRadius: 4,
+            width: scaleValue(18, scale),
+            height: scaleValue(18, scale),
+            cornerRadius: scaleValue(9, scale),
             horizontalAlignItems: "center",
             verticalAlignItems: "center",
-            hoverStyle: { fill: "#F3F4F6" },
+            hoverStyle: { fill: iconHoverFill },
             onClick: onEditClick
           },
-          /* @__PURE__ */ figma.widget.h(EditIcon, { color: "#55606B", size: 12 })
-        ),
+          /* @__PURE__ */ figma.widget.h(EditIcon, { color: theme.text, size: scaleValue(16, scale) })
+        ), /* @__PURE__ */ figma.widget.h(
+          AutoLayout,
+          {
+            width: scaleValue(18, scale),
+            height: scaleValue(18, scale),
+            cornerRadius: scaleValue(9, scale),
+            horizontalAlignItems: "center",
+            verticalAlignItems: "center",
+            hoverStyle: { fill: iconHoverFill },
+            onClick: onLinksClick
+          },
+          /* @__PURE__ */ figma.widget.h(LinkIcon, { color: theme.text, size: scaleValue(16, scale) })
+        )),
         /* @__PURE__ */ figma.widget.h(Frame, { width: "fill-parent", height: 1, opacity: 0 }),
-        /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", verticalAlignItems: "center", spacing: scaleValue(6, scale) }, /* @__PURE__ */ figma.widget.h(
+        /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: scaleValue(4, scale), verticalAlignItems: "center" }, /* @__PURE__ */ figma.widget.h(
+          Text,
+          {
+            font: FOOTER_META_FONT,
+            fontFamily: "Inter",
+            fontSize: metaSize,
+            fontWeight: 500,
+            fill: theme.secondaryText,
+            horizontalAlignText: "right"
+          },
+          formatUpdatedAt(note.updatedAt)
+        ), /* @__PURE__ */ figma.widget.h(
+          Frame,
+          {
+            width: scaleValue(4, scale),
+            height: scaleValue(4, scale),
+            cornerRadius: scaleValue(2, scale),
+            fill: theme.secondaryText,
+            opacity: 0.4
+          }
+        ), /* @__PURE__ */ figma.widget.h(
           AutoLayout,
           {
             direction: "horizontal",
@@ -597,176 +857,28 @@
               font: META_MEDIUM_FONT,
               fontFamily: NOTE_FONT_FAMILY,
               fontSize: metaSize,
-              fontWeight: BODY_FONT_WEIGHT,
-              fill: "#4B5563"
+              fontWeight: 500,
+              fill: theme.secondaryText,
+              horizontalAlignText: "right"
             },
             authorLabel
           ),
-          /* @__PURE__ */ figma.widget.h(
-            AutoLayout,
-            {
-              width: scaleValue(16, scale),
-              height: scaleValue(16, scale),
-              cornerRadius: scaleValue(8, scale),
-              fill: author.avatarFill,
-              horizontalAlignItems: "center",
-              verticalAlignItems: "center"
-            },
-            author.avatarSrc ? /* @__PURE__ */ figma.widget.h(
-              Image,
-              {
-                src: author.avatarSrc,
-                width: scaleValue(16, scale),
-                height: scaleValue(16, scale),
-                cornerRadius: scaleValue(8, scale)
-              }
-            ) : /* @__PURE__ */ figma.widget.h(
-              Text,
-              {
-                font: META_BOLD_FONT,
-                fontFamily: NOTE_FONT_FAMILY,
-                fontSize: scaleValue(8, scale),
-                fontWeight: 700,
-                fill: author.avatarText
-              },
-              author.initials
-            )
-          )
-        ), /* @__PURE__ */ figma.widget.h(Frame, { width: scaleValue(4, scale), height: scaleValue(4, scale), cornerRadius: scaleValue(2, scale), fill: "#D1D5DB" }), /* @__PURE__ */ figma.widget.h(
-          Text,
-          {
-            font: META_MEDIUM_FONT,
-            fontFamily: NOTE_FONT_FAMILY,
-            fontSize: metaSize,
-            fontWeight: BODY_FONT_WEIGHT,
-            fill: "#4B5563",
-            horizontalAlignText: "right"
-          },
-          formatUpdatedAt(note.updatedAt)
-        ), /* @__PURE__ */ figma.widget.h(Frame, { width: scaleValue(4, scale), height: scaleValue(4, scale), cornerRadius: scaleValue(2, scale), fill: "#D1D5DB" }), /* @__PURE__ */ figma.widget.h(
-          AutoLayout,
-          {
-            padding: {
-              top: scaleValue(3, scale),
-              right: scaleValue(8, scale),
-              bottom: scaleValue(3, scale),
-              left: scaleValue(8, scale)
-            },
-            cornerRadius: scaleValue(999, scale),
-            fill: category.color,
-            hoverStyle: { fill: category.color, opacity: 0.82 },
-            onClick: onCategoryClick
-          },
-          /* @__PURE__ */ figma.widget.h(
-            Text,
-            {
-              font: META_MEDIUM_FONT,
-              fontFamily: NOTE_FONT_FAMILY,
-              fontSize: tagSize,
-              fontWeight: BODY_FONT_WEIGHT,
-              fill: "#FFFFFF"
-            },
-            category.label
-          )
+          avatar
         ))
-      ),
-      /* @__PURE__ */ figma.widget.h(
-        AutoLayout,
-        {
-          direction: "vertical",
-          width: "fill-parent",
-          spacing: scaleValue(8, scale),
-          padding: {
-            top: !singleTextMode && !hideHeader ? 0 : contentInset,
-            right: contentInset,
-            bottom: contentInset,
-            left: contentInset
-          },
-          horizontalAlignItems: "end"
-        },
-        !singleTextMode && !hideTitle && /* @__PURE__ */ figma.widget.h(
-          Input,
-          {
-            value: title,
-            placeholder: "\u0639\u0646\u0648\u0627\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
-            font: TITLE_FONT,
-            fontFamily: NOTE_FONT_FAMILY,
-            fontSize: titleSize,
-            fontWeight: TITLE_FONT_WEIGHT,
-            fill: title ? "#24292F" : PLACEHOLDER_FILL,
-            width: "fill-parent",
-            horizontalAlignText: "right",
-            inputBehavior: "wrap",
-            placeholderProps: {
-              font: TITLE_FONT,
-              fill: PLACEHOLDER_FILL,
-              fontFamily: NOTE_FONT_FAMILY,
-              fontSize: titleSize,
-              fontWeight: TITLE_FONT_WEIGHT
-            },
-            onTextEditEnd: (event) => onTitleChange(event.characters)
-          }
-        ),
-        /* @__PURE__ */ figma.widget.h(
-          Input,
-          {
-            value: body,
-            placeholder: "\u0645\u062A\u0646 \u06CC\u0627\u062F\u062F\u0627\u0634\u062A",
-            font: BODY_FONT,
-            fontFamily: NOTE_FONT_FAMILY,
-            fontSize: bodySize,
-            fontWeight: BODY_FONT_WEIGHT,
-            lineHeight: scaleValue(21, scale),
-            fill: body ? "#4B5563" : PLACEHOLDER_FILL,
-            width: "fill-parent",
-            horizontalAlignText: "right",
-            inputBehavior: "multiline",
-            placeholderProps: {
-              font: BODY_FONT,
-              fill: PLACEHOLDER_FILL,
-              fontFamily: NOTE_FONT_FAMILY,
-              fontSize: bodySize,
-              fontWeight: BODY_FONT_WEIGHT
-            },
-            onTextEditEnd: (event) => onBodyChange(event.characters)
-          }
-        )
-      ),
-      !singleTextMode && links.length > 0 && /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", width: "fill-parent", spacing: scaleValue(12, scale), horizontalAlignItems: "end" }, /* @__PURE__ */ figma.widget.h(Frame, { width: "fill-parent", height: 1, fill: "#E5E7EB" }), /* @__PURE__ */ figma.widget.h(
-        AutoLayout,
-        {
-          direction: "horizontal",
-          width: "fill-parent",
-          spacing: scaleValue(16, scale),
-          horizontalAlignItems: "end",
-          verticalAlignItems: "center"
-        },
-        links.map((link) => /* @__PURE__ */ figma.widget.h(LinkButton, { key: link.id, link, scale }))
-      ))
+      )
     );
-    const card = /* @__PURE__ */ figma.widget.h(
-      AutoLayout,
-      {
-        width,
-        padding: colorPadding,
-        cornerRadius: scaleValue(24, scale),
-        stroke,
-        strokeWidth: scaleValue(2, scale),
-        strokeDashPattern: singleTextMode ? [] : [scaleValue(6, scale), scaleValue(6, scale)]
-      },
-      cardContent
-    );
+    const card = singleTextMode ? simpleCard : fullCard;
     if (legSide === "left") {
-      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: scaleValue(8, scale), verticalAlignItems: legPositionToVerticalAlign(legPosition) }, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", padding: sideLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "left", length: legLength, scale, stroke })), card);
+      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: 0, verticalAlignItems: legPositionToVerticalAlign(legPosition) }, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", padding: sideLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "left", length: legLength, scale, stroke })), card);
     }
     if (legSide === "right") {
-      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: scaleValue(8, scale), verticalAlignItems: legPositionToVerticalAlign(legPosition) }, card, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", padding: sideLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "right", length: legLength, scale, stroke })));
+      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", spacing: 0, verticalAlignItems: legPositionToVerticalAlign(legPosition) }, card, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", padding: sideLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "right", length: legLength, scale, stroke })));
     }
     if (legSide === "top") {
-      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", spacing: scaleValue(8, scale), horizontalAlignItems: legPositionToHorizontalAlign(legPosition) }, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", padding: verticalLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "top", length: legLength, scale, stroke })), card);
+      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", spacing: 0, horizontalAlignItems: legPositionToHorizontalAlign(legPosition) }, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", padding: verticalLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "top", length: legLength, scale, stroke })), card);
     }
     if (legSide === "bottom") {
-      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", spacing: scaleValue(8, scale), horizontalAlignItems: legPositionToHorizontalAlign(legPosition) }, card, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", padding: verticalLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "bottom", length: legLength, scale, stroke })));
+      return /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "vertical", spacing: 0, horizontalAlignItems: legPositionToHorizontalAlign(legPosition) }, card, /* @__PURE__ */ figma.widget.h(AutoLayout, { direction: "horizontal", padding: verticalLegPadding }, /* @__PURE__ */ figma.widget.h(ConnectorLeg, { side: "bottom", length: legLength, scale, stroke })));
     }
     return card;
   }
@@ -777,19 +889,24 @@
     const [body, setBody] = useSyncedState("body", "");
     const [contentMigrated, setContentMigrated] = useSyncedState("contentMigrated", false);
     const [links, setLinks] = useSyncedState("links", []);
-    const [currentUser] = useSyncedState("currentUser", () => snapshotCurrentUser());
-    const [scaleIndex, setScaleIndex] = useSyncedState("scaleIndex", 4);
+    const [scaleIndex, setScaleIndex] = useSyncedState("scaleIndex", 3);
+    const [scaleIndexMigrated, setScaleIndexMigrated] = useSyncedState("scaleIndexMigratedV2", false);
     const [cardWidth, setCardWidth] = useSyncedState("cardWidth", "small");
     const [legSide, setLegSide] = useSyncedState("legSide", "left");
     const [legPosition, setLegPosition] = useSyncedState("legPosition", "middle");
     const [legLength, setLegLength] = useSyncedState("legLength", "small");
-    const [hideHeader, setHideHeader] = useSyncedState("hideHeader", false);
     const [hideTitle, setHideTitle] = useSyncedState("hideTitle", false);
     const [singleTextMode, setSingleTextMode] = useSyncedState("singleTextMode", false);
     const scale = SCALE_STEPS[Math.min(Math.max(scaleIndex, 0), SCALE_STEPS.length - 1)];
     useEffect(() => {
+      var _a;
+      if (!scaleIndexMigrated) {
+        setScaleIndex((_a = SCALE_INDEX_MIGRATION[scaleIndex]) != null ? _a : Math.min(Math.max(scaleIndex, 0), SCALE_STEPS.length - 1));
+        setScaleIndexMigrated(true);
+        return;
+      }
       if (!note.authorName) {
-        setNote(withDefaultAuthor(note, currentUser));
+        setNote(withDefaultAuthor(note));
       } else {
         const normalized = normalizeAuthor(note);
         const normalizedCategory = normalizeCategory(normalized.category);
@@ -814,37 +931,33 @@
           isToggled: !singleTextMode,
           icon: MENU_ICONS.simpleAdvanced
         },
+        { itemType: "separator" },
         {
-          itemType: "dropdown",
-          propertyName: "cardWidth",
-          tooltip: "Width",
-          selectedOption: cardWidth,
-          options: CARD_WIDTH_OPTIONS
+          itemType: "toggle",
+          propertyName: "cardWidthSmall",
+          tooltip: "Small",
+          isToggled: cardWidth === "small",
+          icon: MENU_ICONS.cardSmall
+        },
+        {
+          itemType: "toggle",
+          propertyName: "cardWidthMedium",
+          tooltip: "Medium",
+          isToggled: cardWidth === "medium",
+          icon: MENU_ICONS.cardMedium
+        },
+        {
+          itemType: "toggle",
+          propertyName: "cardWidthLarge",
+          tooltip: "Large",
+          isToggled: cardWidth === "large",
+          icon: MENU_ICONS.cardLarge
         },
         { itemType: "separator" },
-        ...singleTextMode ? [] : [
-          {
-            itemType: "toggle",
-            propertyName: "hideHeader",
-            tooltip: "Hide header",
-            isToggled: !hideHeader,
-            icon: MENU_ICONS.hideHeader
-          },
-          {
-            itemType: "toggle",
-            propertyName: "hideTitle",
-            tooltip: "Hide title",
-            isToggled: !hideTitle,
-            icon: MENU_ICONS.hideTitle
-          },
-          { itemType: "separator" },
-          { itemType: "action", propertyName: "addLink", tooltip: "Add link", icon: MENU_ICONS.addLink },
-          { itemType: "separator" }
-        ],
         {
           itemType: "dropdown",
           propertyName: "legSide",
-          tooltip: "Direction",
+          tooltip: "Leg direction",
           selectedOption: legSide,
           options: LEG_SIDE_OPTIONS
         },
@@ -852,14 +965,14 @@
           {
             itemType: "dropdown",
             propertyName: "legPosition",
-            tooltip: "Position",
+            tooltip: "Leg position",
             selectedOption: legPosition,
             options: getLegPositionOptions(legSide)
           },
           {
             itemType: "dropdown",
             propertyName: "legLength",
-            tooltip: "Length",
+            tooltip: "Leg length",
             selectedOption: legLength,
             options: LEG_LENGTH_OPTIONS
           }
@@ -868,33 +981,24 @@
         { itemType: "action", propertyName: "scaleDown", tooltip: "Smaller", icon: MENU_ICONS.scaleDown },
         { itemType: "action", propertyName: "scaleUp", tooltip: "Larger", icon: MENU_ICONS.scaleUp },
         { itemType: "separator" },
+        { itemType: "action", propertyName: "allNotes", tooltip: "All notes", icon: MENU_ICONS.allNotes },
         { itemType: "action", propertyName: "newNote", tooltip: "Add new note", icon: MENU_ICONS.newNote }
       ],
       ({ propertyName, propertyValue }) => {
-        if (propertyName === "addLink") {
-          openManageLinksModal(links, (nextLinks) => {
-            setLinks(nextLinks);
-            setNote(__spreadProps(__spreadValues({}, note), {
-              fontFamily: NOTE_FONT_FAMILY,
-              updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-            }));
-          });
-          return;
-        }
         if (propertyName === "advancedMode") {
           setSingleTextMode(!singleTextMode);
           return;
         }
-        if (propertyName === "cardWidth" && propertyValue) {
-          setCardWidth(propertyValue);
+        if (propertyName === "cardWidthLarge") {
+          setCardWidth("large");
           return;
         }
-        if (propertyName === "hideHeader") {
-          setHideHeader(!hideHeader);
+        if (propertyName === "cardWidthMedium") {
+          setCardWidth("medium");
           return;
         }
-        if (propertyName === "hideTitle") {
-          setHideTitle(!hideTitle);
+        if (propertyName === "cardWidthSmall") {
+          setCardWidth("small");
           return;
         }
         if (propertyName === "category" && propertyValue) {
@@ -936,13 +1040,17 @@
           setScaleIndex(Math.min(SCALE_STEPS.length - 1, scaleIndex + 1));
           return;
         }
+        if (propertyName === "allNotes") {
+          openAllNotesModal(widgetId);
+          return;
+        }
         if (propertyName === "newNote") {
           waitForTask(
             (async () => {
               var _a;
               const widgetNode = await figma.getNodeByIdAsync(widgetId);
               if (!widgetNode || widgetNode.type !== "WIDGET") return;
-              const profile = getAuthorProfile(note, currentUser);
+              const profile = getAuthorProfile(note);
               const clonedWidget = widgetNode.cloneWidget({
                 note: __spreadProps(__spreadValues({}, EMPTY_NOTE), {
                   authorId: profile.id,
@@ -953,13 +1061,11 @@
                 body: "",
                 contentMigrated: true,
                 links: [],
-                currentUser,
                 scaleIndex,
                 cardWidth,
                 legSide,
                 legPosition,
                 legLength,
-                hideHeader: false,
                 hideTitle: false,
                 singleTextMode: false
               });
@@ -993,7 +1099,7 @@
       });
     };
     const handleAuthorSelect = () => {
-      openAuthorModal(getAuthorProfile(note, currentUser).id, (authorId) => {
+      openAuthorModal(getAuthorProfile(note).id, (authorId) => {
         const author = findAuthorProfileById(authorId);
         if (!author) return;
         setNote(__spreadProps(__spreadValues({}, note), {
@@ -1004,33 +1110,46 @@
         }));
       });
     };
+    const applyFullEditPayload = (payload) => {
+      const author = findAuthorProfileById(payload.authorId) || getAuthorProfile(note);
+      setTitle(payload.title);
+      setBody(payload.body);
+      setLinks(payload.links);
+      setNote(__spreadProps(__spreadValues({}, note), {
+        category: normalizeCategory(payload.category),
+        authorId: author.id,
+        authorName: author.name,
+        fontFamily: NOTE_FONT_FAMILY,
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      }));
+    };
     const handleFullEdit = () => {
       openFullEditModal({
         title,
         body,
         category: note.category,
-        authorId: getAuthorProfile(note, currentUser).id,
+        authorId: getAuthorProfile(note).id,
         links,
-        onSave: (payload) => {
-          const author = findAuthorProfileById(payload.authorId) || getAuthorProfile(note, currentUser);
-          setTitle(payload.title);
-          setBody(payload.body);
-          setLinks(payload.links);
-          setNote(__spreadProps(__spreadValues({}, note), {
-            category: normalizeCategory(payload.category),
-            authorId: author.id,
-            authorName: author.name,
-            fontFamily: NOTE_FONT_FAMILY,
-            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-          }));
-        }
+        onLive: applyFullEditPayload,
+        onSave: applyFullEditPayload
+      });
+    };
+    const handleLinksSelect = () => {
+      openFullEditModal({
+        title,
+        body,
+        category: note.category,
+        authorId: getAuthorProfile(note).id,
+        links,
+        openLinkDialog: true,
+        onLive: applyFullEditPayload,
+        onSave: applyFullEditPayload
       });
     };
     return /* @__PURE__ */ figma.widget.h(
       NoteCard,
       {
         note,
-        currentUser,
         scale,
         cardWidth,
         legSide,
@@ -1039,12 +1158,12 @@
         title,
         body,
         links,
-        hideHeader,
         hideTitle,
         singleTextMode,
         onCategoryClick: handleCategorySelect,
         onAuthorClick: handleAuthorSelect,
         onEditClick: handleFullEdit,
+        onLinksClick: handleLinksSelect,
         onTitleChange: handleTitleChange,
         onBodyChange: handleBodyChange
       }

@@ -7,16 +7,35 @@
         box-sizing: border-box;
       }
 
+      :root {
+        --ui-bg-main: #ffffff;
+        --ui-bg-secondary: #eceef1;
+        --ui-bg-tertiary: #f9f9f9;
+        --ui-border-primary: #d9dde2;
+        --ui-text-primary: #55606b;
+        --ui-text-placeholder: rgba(85, 96, 107, 0.4);
+        --text-link-blue: #0072e9;
+      }
+
       body {
         margin: 0;
-        background: #f4f5f7;
-        color: #111827;
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
         font-family: "IRANSansXVF", "IRANSans", Tahoma, Arial, sans-serif;
-        font-size: 13px;
-        line-height: 1.45;
         direction: rtl;
         text-align: right;
         overflow: hidden;
+      }
+
+      button,
+      input,
+      textarea {
+        font-family: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
       }
 
       .panel {
@@ -27,381 +46,815 @@
         display: flex;
       }
 
-      form {
+      .editor {
+        width: 450px;
+        min-height: 374px;
         flex-direction: column;
-        gap: 14px;
-        padding: 16px;
+        align-items: stretch;
+        background: var(--ui-bg-main);
+        direction: rtl;
+        position: relative;
         overflow: hidden;
       }
 
-      h1 {
-        margin: 0;
-        font-size: 16px;
+      .editor-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        min-height: 52px;
+        padding: 8px 12px;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+        overflow: hidden;
+        direction: rtl;
       }
 
-      .hint {
-        margin: 2px 0 0;
-        color: #6b7280;
+      .editor-tools {
+        display: flex;
+        flex: 1 0 0;
+        min-width: 0;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px;
+        direction: rtl;
+        flex-direction: row;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex: 0 0 auto;
+        border-radius: 999px;
+        padding: 2px 8px;
         font-size: 12px;
         font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
       }
 
-      label {
+      .author-pill {
+        background: var(--ui-bg-secondary);
+        color: var(--ui-text-primary);
+        padding-left: 8px;
+        padding-right: 4px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        flex-direction: row;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .status-pill {
+        background: var(--category-bg);
+        color: var(--category-status);
+        padding: 4px 12px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      #categoryButton {
+        padding: 0;
+        background: transparent;
+      }
+
+      #authorButton {
+        padding: 0;
+        background: transparent;
+      }
+
+      .status-choice {
+        padding: 0;
+        border-radius: 999px;
+        background: transparent;
+      }
+
+      .author-choice {
+        padding: 0;
+        border-radius: 999px;
+        background: transparent;
+      }
+
+      .choice-panel {
+        width: 216px;
+        min-height: 0;
+        flex-direction: column;
+        align-items: stretch;
+        padding-bottom: 24px;
+        background: var(--ui-bg-main);
+        direction: rtl;
+        overflow: hidden;
+      }
+
+      .choice-list {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        font-weight: 600;
-        color: #374151;
-        text-align: right;
+        align-items: stretch;
+        width: 100%;
       }
 
-      input {
+      .choice-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
         width: 100%;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: #fff;
-        color: #111827;
-        font: inherit;
-        font-weight: 500;
-        outline: none;
-        padding: 9px 10px;
-        text-align: right;
-      }
-
-      select {
-        width: 100%;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: #fff;
-        color: #111827;
-        font: inherit;
-        font-weight: 500;
-        outline: none;
-        padding: 9px 10px;
-        text-align: right;
-      }
-
-      textarea {
-        width: 100%;
-        min-height: 300px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: #fff;
-        color: #111827;
-        font-family: "IRANSansXVF", "IRANSans", Tahoma, Arial, sans-serif;
+        padding: 8px 12px;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
         font-size: 14px;
         font-weight: 500;
-        line-height: 1.7;
-        outline: none;
-        padding: 10px 12px;
-        resize: none;
-        overflow: hidden;
+        line-height: normal;
         direction: rtl;
         text-align: right;
       }
 
-      #fullEditBody {
-        min-height: 170px;
+      .choice-row:last-child {
+        border-bottom: 0;
       }
 
-      input:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      .choice-row:hover {
+        background: var(--ui-bg-tertiary);
       }
 
-      select:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
-      }
-
-      textarea:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
-      }
-
-      .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 6px;
-      }
-
-      .tool {
-        border: 1px solid #d1d5db;
-        background: #fff;
-        color: #111827;
-        padding: 6px 10px;
-      }
-
-      .tool:hover {
-        background: #eef2ff;
-        border-color: #a5b4fc;
-      }
-
-      .link-editor {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-
-      .link-editor-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .link-editor-title {
-        font-weight: 600;
-        color: #374151;
-      }
-
-      .link-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .link-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
-        gap: 8px;
-        align-items: center;
-        padding: 8px;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        background: #fff;
-      }
-
-      .link-remove {
-        min-width: 34px;
-        height: 34px;
-        padding: 0;
-        border-radius: 8px;
-        background: #f3f4f6;
-        color: #4b5563;
-      }
-
-      .link-remove:hover {
-        background: #fee2e2;
-        color: #991b1b;
-      }
-
-      .empty-links {
-        padding: 10px 12px;
-        border: 1px dashed #d1d5db;
-        border-radius: 10px;
-        color: #6b7280;
-        background: #fff;
-        text-align: right;
-      }
-
-
-      .actions {
-        display: flex;
-        direction: ltr;
-        justify-content: flex-start;
-        gap: 8px;
-        margin-top: 4px;
-      }
-
-      button {
-        border: 0;
-        border-radius: 8px;
-        font: inherit;
-        font-weight: 600;
-        padding: 9px 14px;
-        cursor: pointer;
-      }
-
-      .secondary {
-        background: #e5e7eb;
-        color: #111827;
-      }
-
-      .primary {
-        background: #4f46e5;
-        color: #fff;
-      }
-
-      .small-action {
-        padding: 7px 10px;
-        border: 1px solid #d1d5db;
-        background: #fff;
-        color: #111827;
-      }
-
-      .category-panel {
-        flex-direction: column;
-        background: #fff;
-      }
-
-      .category-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 14px;
-        background: #27272a;
-        color: #fff;
-        font-weight: 700;
-      }
-
-      .close {
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        background: transparent;
-        color: #fff;
-        font-size: 20px;
-        line-height: 1;
-        padding: 0;
-      }
-
-      .category-list {
-        display: flex;
-        flex-direction: column;
-        border-top: 1px solid #e5e7eb;
-      }
-
-      .category-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        min-height: 44px;
-        padding: 0 16px;
-        border: 0;
-        border-bottom: 1px solid #e5e7eb;
-        border-radius: 0;
-        background: #fff;
-        color: #1f2937;
-        text-align: right;
+      .choice-label {
+        color: var(--ui-text-primary);
+        font-size: 14px;
         font-weight: 500;
+        line-height: normal;
+        white-space: nowrap;
       }
 
-      .category-row:hover,
-      .category-row.selected {
-        background: #f3f4f6;
-      }
-
-      .dot {
+      .category-dot {
         width: 10px;
         height: 10px;
         flex: 0 0 auto;
         border-radius: 999px;
       }
 
-      .author-avatar {
+      .avatar {
         width: 20px;
         height: 20px;
-        flex: 0 0 auto;
         border-radius: 999px;
         object-fit: cover;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #111827;
+        font-size: 8px;
+        font-weight: 700;
+      }
+
+      .icon-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 4px;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ui-text-primary);
+      }
+
+      .icon-action:hover,
+      .icon-action.active,
+      .icon-action.active:hover {
+        background: rgba(85, 96, 107, 0.1);
+      }
+
+      .icon-action svg {
+        width: 28px;
+        height: 28px;
+        display: block;
+      }
+
+      .picker-strip {
+        display: none;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 12px;
+        background: var(--ui-bg-tertiary);
+        border-bottom: 0.5px solid var(--ui-border-primary);
+        direction: rtl;
+      }
+
+      .picker-strip.active {
+        display: flex;
+      }
+
+      .field {
+        width: 100%;
+        border: 0;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
+        outline: none;
+        text-align: right;
+      }
+
+      .title-field {
+        padding: 16px 12px;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      .body-field {
+        height: 240px;
+        resize: none;
+        padding: 16px 12px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: normal;
+      }
+
+      .field::placeholder {
+        color: var(--ui-text-placeholder);
+        opacity: 1;
+      }
+
+      .links-panel {
+        display: none;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 12px;
+        background: var(--ui-bg-tertiary);
+        border-bottom: 0.5px solid var(--ui-border-primary);
+      }
+
+      .links-panel.active {
+        display: flex;
+      }
+
+      .links-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        direction: rtl;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+      }
+
+      .new-link {
+        padding: 0 0 4px;
+        background: transparent;
+        color: var(--text-link-blue);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .links-title {
+        color: var(--ui-text-primary);
+      }
+
+      .link-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .link-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
+        direction: rtl;
+      }
+
+      .link-content {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 240px;
+        min-width: 0;
+        direction: ltr;
+      }
+
+      .link-actions {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex: 0 0 auto;
+        direction: ltr;
+      }
+
+      .link-action-edit {
+        margin-left: 8px;
+      }
+
+      .link-url-text {
+        min-width: 0;
+        max-width: 250px;
+        margin-left: 12px;
+        overflow: hidden;
+        color: var(--ui-text-primary);
+        font-size: 16px;
+        font-weight: 400;
+        opacity: 0.8;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .link-title-display {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 0 0 auto;
+        color: var(--ui-text-primary);
+        direction: rtl;
+        font-size: 16px;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+
+      .link-title-display svg {
+        width: 20px;
+        height: 20px;
+        color: var(--ui-text-primary);
+        opacity: 0.8;
+      }
+
+      .trash-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        background: transparent;
+        color: var(--ui-text-primary);
+        opacity: 0.8;
+      }
+
+      .trash-button svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .footer {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        padding: 12px 12px;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+      }
+
+      .save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: var(--text-link-blue);
+        color: var(--ui-bg-main);
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      .link-modal-layer {
+        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        align-items: center;
+        justify-content: center;
+        background: rgba(85, 96, 107, 0.4);
+      }
+
+      .link-modal-layer.active {
+        display: flex;
+      }
+
+      .link-dialog {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 16px;
+        width: calc(100% - 32px);
+        padding: 16px;
+        border: 1px solid var(--ui-border-primary);
+        border-radius: 8px;
+        background: var(--ui-bg-main);
+      }
+
+      .link-dialog-title {
+        margin: 0;
+        color: var(--ui-text-primary);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .link-dialog-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .link-dialog-input {
+        width: 100%;
+        border: 1px solid var(--ui-border-primary);
+        border-radius: 6px;
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
+        font-size: 12px;
+        font-weight: 500;
+        outline: none;
+        padding: 8px 6px;
+        text-align: right;
+      }
+
+      .link-dialog-input.url-filled {
+        color: var(--text-link-blue);
+      }
+
+      .link-dialog-input::placeholder {
+        color: var(--ui-text-placeholder);
+        opacity: 1;
+      }
+
+      .link-dialog-actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 4px;
+        width: 100%;
+        direction: ltr;
+      }
+
+      .dialog-primary,
+      .dialog-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .dialog-primary {
+        background: var(--text-link-blue);
+        color: var(--ui-bg-main);
+      }
+
+      .dialog-secondary {
+        border: 1px solid var(--ui-border-primary);
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
+      }
+
+      .all-notes-panel {
+        width: 450px;
+        height: 580px;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
+        direction: rtl;
+        overflow: hidden;
+      }
+
+      .all-notes-searchbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 36px;
+        margin: 0;
+        padding: 8px 6px;
+        border: 1px solid var(--ui-border-primary);
+        border-radius: 6px;
+        background: var(--ui-bg-main);
+        direction: rtl;
+      }
+
+      .all-notes-search {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ui-text-primary);
+        font-size: 12px;
+        font-weight: 500;
+        text-align: right;
+      }
+
+      .all-notes-search::placeholder {
+        color: var(--ui-text-placeholder);
+        opacity: 1;
+      }
+
+      .all-notes-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 4px;
+        width: 100%;
+        direction: rtl;
+        text-align: right;
+      }
+
+      .all-notes-tab {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 12px;
+        border: 1px solid var(--ui-border-primary);
+        border-radius: 999px;
+        background: var(--ui-bg-main);
+        color: var(--ui-text-primary);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      .all-notes-tab.selected {
+        border-color: transparent;
+        background: #d5ecf8;
+        color: var(--text-link-blue);
+      }
+
+      .all-notes-list {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        padding: 0;
+        overflow: auto;
+      }
+
+      .all-note-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        justify-content: stretch;
+        gap: 10px;
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--ui-text-primary);
+        direction: ltr;
+        text-align: right;
+      }
+
+      .all-note-row:hover {
+        background: var(--ui-bg-tertiary);
+      }
+
+      .all-note-content {
+        display: flex;
+        align-items: flex-start;
+        grid-column: 2;
+        justify-content: flex-end;
+        min-width: 0;
+        text-align: right;
+      }
+
+      .all-note-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .all-note-title {
+        overflow: hidden;
+        color: var(--ui-text-primary);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: normal;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .all-note-meta {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        min-width: 0;
+        overflow: hidden;
+        color: var(--ui-text-primary);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: normal;
+        opacity: 0.6;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .all-note-meta-dot {
+        width: 3px;
+        height: 3px;
+        border-radius: 999px;
+        background: currentColor;
+        flex: 0 0 auto;
+      }
+
+      .all-note-chip {
+        display: inline-flex;
+        align-items: center;
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      .all-notes-empty {
+        padding: 32px 14px;
+        color: var(--ui-text-placeholder);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .all-notes-search-section {
+        width: 100%;
+        padding: 12px 16px;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+      }
+
+      .all-notes-content-section {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 12px;
+        width: 100%;
+        padding: 12px 16px;
+        border-bottom: 0.5px solid var(--ui-border-primary);
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
-    <form id="linkForm" class="panel">
-      <div class="link-editor">
-        <div class="link-editor-header">
-          <span class="link-editor-title">لینک‌ها</span>
-          <button type="button" class="small-action" id="addManageLink">افزودن لینک</button>
+    <form id="fullEditForm" class="panel editor">
+      <div class="editor-toolbar" data-close-picker>
+        <div class="editor-tools">
+          <button type="button" class="icon-action" data-full-format="bullet" aria-label="لیست"></button>
+          <button type="button" class="icon-action" data-full-format="number" aria-label="لیست عددی"></button>
+          <button type="button" class="icon-action" id="linkToggleButton" aria-label="لینک"></button>
+          <button type="button" class="pill status-pill" id="categoryButton"></button>
+          <button type="button" class="pill author-pill" id="authorButton"></button>
         </div>
-        <div id="manageLinks" class="link-list"></div>
       </div>
 
-      <div class="actions">
-        <button type="submit" class="primary">ذخیره لینک‌ها</button>
-        <button type="button" class="secondary" data-cancel>انصراف</button>
-      </div>
-    </form>
+      <div id="categoryPicker" class="picker-strip"></div>
+      <div id="authorPicker" class="picker-strip"></div>
 
-    <section id="categoryPanel" class="panel category-panel">
-      <div id="categoryList" class="category-list"></div>
-    </section>
+      <input id="fullEditTitle" class="field title-field" type="text" placeholder="یادداشت جدید" dir="rtl" />
+      <textarea id="fullEditBody" class="field body-field" placeholder="یادداشت ..."></textarea>
 
-    <section id="authorPanel" class="panel category-panel">
-      <div id="authorList" class="category-list"></div>
-    </section>
-
-    <form id="fullEditForm" class="panel">
-      <div class="field-row">
-        <label>
-          نوع
-          <select id="fullEditCategory"></select>
-        </label>
-
-        <label>
-          نویسنده
-          <select id="fullEditAuthor"></select>
-        </label>
-      </div>
-
-      <label>
-        عنوان
-        <input id="fullEditTitle" type="text" placeholder="عنوان یادداشت" dir="rtl" />
-      </label>
-
-      <label>
-        متن
-        <textarea id="fullEditBody" placeholder="متن یادداشت"></textarea>
-      </label>
-
-      <div class="toolbar">
-        <button type="button" class="tool" data-full-format="bullet">بولت</button>
-        <button type="button" class="tool" data-full-format="number">شماره‌گذاری</button>
-      </div>
-
-      <div class="link-editor">
-        <div class="link-editor-header">
-          <span class="link-editor-title">لینک‌ها</span>
-          <button type="button" class="small-action" id="addFullEditLink">افزودن لینک</button>
+      <section id="linksPanel" class="links-panel">
+        <div class="links-header">
+          <span class="links-title" id="linksTitle">لینک‌ها (۰)</span>
+          <button type="button" class="new-link" id="addFullEditLink">لینک جدید</button>
         </div>
         <div id="fullEditLinks" class="link-list"></div>
-      </div>
+      </section>
 
-      <div class="actions">
-        <button type="submit" class="primary">ذخیره یادداشت</button>
-        <button type="button" class="secondary" data-cancel>انصراف</button>
+      <div id="linkModalLayer" class="link-modal-layer">
+        <div class="link-dialog">
+          <p class="link-dialog-title" id="linkDialogTitle">افزودن لینک</p>
+          <div class="link-dialog-fields">
+            <input id="linkDialogTitleInput" class="link-dialog-input" type="text" placeholder="عنوان لینک" dir="rtl" />
+            <input id="linkDialogUrlInput" class="link-dialog-input" type="text" placeholder="نشانی لینک" dir="rtl" />
+          </div>
+          <div class="link-dialog-actions">
+            <button type="button" class="dialog-primary" id="linkDialogSave">افزودن لینک</button>
+            <button type="button" class="dialog-secondary" id="linkDialogCancel">انصراف</button>
+          </div>
+        </div>
       </div>
     </form>
 
+    <form id="linkForm" class="panel editor">
+      <section class="links-panel active">
+        <div class="links-header">
+          <span class="links-title" id="manageLinksTitle">لینک‌ها (۰)</span>
+          <button type="button" class="new-link" id="addManageLink">لینک جدید</button>
+        </div>
+        <div id="manageLinks" class="link-list"></div>
+      </section>
+      <div class="footer">
+        <button type="submit" class="save">ذخیره لینک‌ها</button>
+      </div>
+    </form>
+
+    <section id="categoryPanel" class="panel choice-panel">
+      <div id="categoryList" class="choice-list"></div>
+    </section>
+
+    <section id="authorPanel" class="panel choice-panel">
+      <div id="authorList" class="choice-list"></div>
+    </section>
+
+    <section id="allNotesPanel" class="panel all-notes-panel">
+      <div class="all-notes-search-section">
+        <div class="all-notes-searchbar">
+          <input id="allNotesSearch" class="all-notes-search" type="text" placeholder="جستجوی یادداشت" />
+        </div>
+      </div>
+      <div class="all-notes-content-section">
+        <div class="all-notes-tabs" id="allNotesFilters"></div>
+        <div id="allNotesList" class="all-notes-list"></div>
+      </div>
+    </section>
+
     <script>
+      const ICONS = {
+        link: '<svg viewBox="0 0 24 24" fill="none"><path d="M20.25 12C20.25 7.44365 16.5563 3.75 12 3.75C7.44365 3.75 3.75 7.44365 3.75 12C3.75 16.5563 7.44365 20.25 12 20.25C16.5563 20.25 20.25 16.5563 20.25 12ZM8.31934 10.1201C8.61223 9.82722 9.08699 9.82722 9.37988 10.1201C9.67278 10.413 9.67278 10.8878 9.37988 11.1807L8.48047 12.0801C7.53066 13.0299 7.53064 14.5707 8.48047 15.5205C9.43029 16.47 10.9702 16.4701 11.9199 15.5205L12.8193 14.6201C13.1122 14.3272 13.588 14.3272 13.8809 14.6201C14.1734 14.913 14.1735 15.3878 13.8809 15.6807L12.9805 16.5811C11.445 18.1165 8.95552 18.1163 7.41992 16.5811C5.88434 15.0454 5.88432 12.5551 7.41992 11.0195L8.31934 10.1201ZM13.2695 9.66992C13.5624 9.37707 14.0372 9.37716 14.3301 9.66992C14.623 9.96281 14.623 10.4376 14.3301 10.7305L10.7305 14.3311C10.4377 14.6237 9.9628 14.6236 9.66992 14.3311C9.37703 14.0382 9.37703 13.5624 9.66992 13.2695L13.2695 9.66992ZM11.0195 7.41992C12.5551 5.88433 15.0455 5.88432 16.5811 7.41992C18.1162 8.95548 18.1163 11.445 16.5811 12.9805L15.6807 13.8809C15.3878 14.1736 14.913 14.1735 14.6201 13.8809C14.3272 13.588 14.3273 13.1132 14.6201 12.8203L15.5195 11.9199C16.4694 10.9701 16.4694 9.4303 15.5195 8.48047C14.5697 7.53078 13.0299 7.53069 12.0801 8.48047L11.1807 9.37988C10.8878 9.67278 10.413 9.67278 10.1201 9.37988C9.82722 9.08699 9.82722 8.61223 10.1201 8.31934L11.0195 7.41992ZM21.75 12C21.75 17.3848 17.3848 21.75 12 21.75C6.61522 21.75 2.25 17.3848 2.25 12C2.25 6.61522 6.61522 2.25 12 2.25C17.3848 2.25 21.75 6.61522 21.75 12Z" fill="currentColor"/></svg>',
+        linkOut: '<svg viewBox="0 0 24 24" fill="none"><path d="M5.10558 5.10546C8.91319 1.29785 15.087 1.29785 18.8946 5.10546C22.7023 8.91308 22.7023 15.0869 18.8946 18.8945C16.5038 21.2853 13.1799 22.1739 10.0978 21.5635C9.69158 21.483 9.42771 21.0888 9.50793 20.6826C9.58838 20.2764 9.98258 20.0115 10.3888 20.0918C13.0009 20.6091 15.812 19.8561 17.8341 17.834C21.0559 14.6122 21.0559 9.38784 17.8341 6.16601C14.6123 2.94419 9.38795 2.94419 6.16613 6.16601C4.14404 8.1881 3.39098 10.9992 3.90832 13.6113C3.98859 14.0175 3.72371 14.4117 3.3175 14.4922C2.91132 14.5724 2.51708 14.3085 2.43664 13.9023C1.82625 10.8202 2.71477 7.49628 5.10558 5.10546ZM14.7501 15.6572C14.7499 16.0713 14.4142 16.4072 14.0001 16.4072C13.586 16.4072 13.2503 16.0713 13.2501 15.6572V11.8105L6.16613 18.8945C5.87321 19.1871 5.39838 19.1873 5.10558 18.8945C4.81279 18.6017 4.81299 18.1269 5.10558 17.834L12.1896 10.75H8.34289C7.92884 10.7498 7.59289 10.4141 7.59289 10C7.59289 9.58591 7.92884 9.2502 8.34289 9.25H14.0001C14.4143 9.25 14.7501 9.58578 14.7501 10V15.6572Z" fill="currentColor"/></svg>',
+        edit: '<svg viewBox="0 0 16 16" fill="none"><path d="M14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8Z" stroke="currentColor" stroke-width="0.96" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.93666 8.98336C5.9602 8.86564 5.97198 8.80679 5.9935 8.75191C6.01261 8.70319 6.03739 8.6569 6.06732 8.61398C6.10104 8.56562 6.14349 8.52318 6.22837 8.4383L9 5.66667C9.36819 5.29848 9.96514 5.29848 10.3333 5.66667C10.7015 6.03486 10.7015 6.63181 10.3333 7L7.5617 9.77163C7.47682 9.85651 7.43438 9.89896 7.38602 9.93268C7.3431 9.96261 7.29681 9.98739 7.24809 10.0065C7.19321 10.028 7.13436 10.0398 7.01664 10.0633L5.66667 10.3333L5.93666 8.98336Z" stroke="currentColor" stroke-width="0.96" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        penClip: '<svg viewBox="0 0 24 24" fill="none"><path d="M16.8811 3.05881C17.955 1.985 19.6958 1.98491 20.7697 3.05881C21.8435 4.13272 21.8435 5.87357 20.7697 6.94748L8.90841 18.8098C8.165 19.5532 7.7311 19.9897 7.23067 20.3391C6.79754 20.6415 6.33063 20.8927 5.83907 21.0862C5.27121 21.3097 4.6672 21.4281 3.63692 21.636L3.14864 21.7346C2.90994 21.7828 2.66266 21.7122 2.48556 21.5451C2.30846 21.3779 2.22361 21.1349 2.25802 20.8938L2.30489 20.5617C2.46875 19.4147 2.56214 18.7426 2.78243 18.1096C2.97303 17.562 3.23314 17.0409 3.55684 16.5598C3.93109 16.0037 4.41323 15.5257 5.23263 14.7063L14.4318 5.50705C14.2688 5.35198 14.123 5.21768 13.9865 5.10178C13.6395 4.80719 13.4063 4.67129 13.1955 4.60276C12.7437 4.45595 12.2567 4.45599 11.8049 4.60276C11.5941 4.67125 11.361 4.80711 11.0139 5.10178C10.66 5.40218 10.2387 5.82129 9.63595 6.42405L8.03048 8.03049C7.73767 8.32326 7.26284 8.3231 6.96993 8.03049C6.67705 7.73761 6.67707 7.26284 6.96993 6.96995L8.5754 5.3635C9.16045 4.77845 9.63089 4.30745 10.0422 3.95823C10.4603 3.6033 10.8669 3.33007 11.341 3.176C12.0941 2.93132 12.9053 2.9314 13.6584 3.176C14.1326 3.33006 14.5391 3.60328 14.9572 3.95823C15.1249 4.10057 15.3014 4.26419 15.4924 4.44651L16.8811 3.05881ZM6.29317 15.7668C5.43375 16.6262 5.07639 16.989 4.80196 17.3967C4.55012 17.7709 4.34672 18.1768 4.19845 18.6028C4.07378 18.9611 3.99977 19.3428 3.89376 20.052C4.59173 19.9081 4.95219 19.8223 5.28927 19.6897C5.6716 19.5392 6.03538 19.3448 6.37227 19.1096C6.73925 18.8534 7.06743 18.5287 7.84688 17.7492L17.2678 8.32834L15.4992 6.55979L6.29317 15.7668ZM19.7092 4.11936C19.2211 3.63125 18.4298 3.63133 17.9416 4.11936L16.5598 5.49924L18.3283 7.2678L19.7092 5.88694C20.1972 5.39881 20.1972 4.60748 19.7092 4.11936Z" fill="currentColor"/></svg>',
+        listOl: '<svg viewBox="0 0 24 24" fill="none"><path d="M21.75 15.7198C21.75 14.3558 20.6442 13.2501 19.2803 13.2501H19C17.7176 13.2501 16.6422 14.1276 16.3369 15.3135C16.2339 15.7146 16.475 16.1234 16.876 16.2266C17.2771 16.3299 17.6858 16.0877 17.7891 15.6866C17.928 15.1474 18.4187 14.7501 19 14.7501H19.2803C19.8158 14.7501 20.25 15.1842 20.25 15.7198C20.25 15.9993 20.1293 16.2652 19.9189 16.4493L16.5059 19.4356C16.2709 19.6413 16.188 19.9713 16.2979 20.2637C16.4078 20.5562 16.6875 20.7501 17 20.7501H21C21.4142 20.7501 21.75 20.4143 21.75 20.0001C21.75 19.5858 21.4142 19.2501 21 19.2501H18.9961L20.9062 17.5782C21.4422 17.1092 21.75 16.4319 21.75 15.7198ZM3 17.251C2.58579 17.2511 2.24998 17.5868 2.25 18.001C2.25017 18.4151 2.5859 18.751 3 18.751L14 18.7501C14.4142 18.75 14.75 18.4142 14.75 18.0001C14.75 17.5859 14.4142 17.2501 14 17.2501L3 17.251ZM3 11.251C2.58579 11.2511 2.24998 11.5868 2.25 12.001C2.25017 12.4151 2.5859 12.751 3 12.751L14 12.7501C14.4142 12.75 14.75 12.4142 14.75 12.0001C14.75 11.5859 14.4142 11.2501 14 11.2501L3 11.251ZM19.3945 3.36236C19.1735 3.22578 18.8974 3.21312 18.665 3.32915L16.665 4.32915C16.2947 4.51433 16.1442 4.9646 16.3291 5.33501C16.5143 5.70537 16.9646 5.85589 17.335 5.67095L18.25 5.21294V9.25005H17C16.5858 9.25005 16.25 9.58584 16.25 10.0001C16.25 10.4143 16.5858 10.7501 17 10.7501H21C21.4142 10.7501 21.75 10.4143 21.75 10.0001C21.75 9.58584 21.4142 9.25005 21 9.25005H19.75V4.00005C19.75 3.74024 19.6155 3.49904 19.3945 3.36236ZM3 5.25103C2.58579 5.25105 2.24998 5.58681 2.25 6.00103C2.25017 6.4151 2.5859 6.75103 3 6.75103L14 6.75005C14.4142 6.75003 14.75 6.41424 14.75 6.00005C14.75 5.58585 14.4142 5.25005 14 5.25005L3 5.25103Z" fill="currentColor"/></svg>',
+        list: '<svg viewBox="0 0 24 24" fill="none"><path d="M20 16.75C19.5858 16.75 19.25 17.0858 19.25 17.5V18.5C19.25 18.9142 19.5858 19.25 20 19.25H21C21.4142 19.25 21.75 18.9142 21.75 18.5V17.5C21.75 17.0858 21.4142 16.75 21 16.75H20ZM3 17.251C2.58579 17.251 2.24998 17.5868 2.25 18.001C2.25014 18.4151 2.58588 18.751 3 18.751L16 18.75C16.4142 18.75 16.75 18.4142 16.75 18C16.75 17.5858 16.4142 17.25 16 17.25L3 17.251ZM20 10.75C19.5858 10.75 19.25 11.0858 19.25 11.5V12.5C19.25 12.9142 19.5858 13.25 20 13.25H21C21.4142 13.25 21.75 12.9142 21.75 12.5V11.5C21.75 11.0858 21.4142 10.75 21 10.75H20ZM3 11.251C2.58579 11.251 2.24998 11.5868 2.25 12.001C2.25011 12.4151 2.58586 12.751 3 12.751L16 12.75C16.4142 12.75 16.75 12.4142 16.75 12C16.75 11.5858 16.4142 11.25 16 11.25L3 11.251ZM20 4.75C19.5858 4.75 19.25 5.08579 19.25 5.5V6.5C19.25 6.91421 19.5858 7.25 20 7.25H21C21.4142 7.25 21.75 6.91421 21.75 6.5V5.5C21.75 5.08579 21.4142 4.75 21 4.75H20ZM3 5.25098C2.58579 5.251 2.24998 5.58676 2.25 6.00098C2.25011 6.41511 2.58586 6.75098 3 6.75098L16 6.75C16.4142 6.74998 16.75 6.41419 16.75 6C16.75 5.5858 16.4142 5.25 16 5.25L3 5.25098Z" fill="currentColor"/></svg>',
+        trash: '<svg viewBox="0 0 24 24" fill="none"><path d="M17.2246 6.77528H6.77539V16.2001C6.77539 17.0529 6.77578 17.646 6.81348 18.1073C6.85042 18.5593 6.91912 18.8163 7.01758 19.0097C7.2309 19.4283 7.57157 19.769 7.99023 19.9823C8.18359 20.0808 8.44055 20.1495 8.89258 20.1864C9.35392 20.2241 9.94704 20.2245 10.7998 20.2245H13.2002C14.053 20.2245 14.6461 20.2241 15.1074 20.1864C15.5595 20.1495 15.8164 20.0808 16.0098 19.9823C16.4284 19.769 16.7691 19.4283 16.9824 19.0097C17.0809 18.8163 17.1496 18.5593 17.1865 18.1073C17.2242 17.646 17.2246 17.0529 17.2246 16.2001V6.77528ZM11.3066 3.77528C10.4111 3.77528 10.1762 3.78827 9.99316 3.86025C9.80246 3.93527 9.63346 4.05659 9.50195 4.21376C9.38684 4.35141 9.30579 4.54617 9.07715 5.2245H14.9229C14.6942 4.54617 14.6132 4.35141 14.498 4.21376C14.3665 4.05659 14.1975 3.93527 14.0068 3.86025C13.8238 3.78827 13.5889 3.77528 12.6934 3.77528H11.3066ZM18.7754 16.2001C18.7754 17.0272 18.7755 17.6942 18.7314 18.2333C18.6867 18.7815 18.5917 19.2654 18.3633 19.7138C18.0014 20.424 17.4241 21.0013 16.7139 21.3632C16.2655 21.5916 15.7816 21.6866 15.2334 21.7313C14.6943 21.7754 14.0273 21.7753 13.2002 21.7753H10.7998C9.97265 21.7753 9.30568 21.7754 8.7666 21.7313C8.21842 21.6866 7.73446 21.5916 7.28613 21.3632C6.57594 21.0013 5.99862 20.424 5.63672 19.7138C5.40828 19.2654 5.31334 18.7815 5.26855 18.2333C5.22452 17.6942 5.22461 17.0272 5.22461 16.2001V6.77528H4C3.57198 6.77528 3.22461 6.42791 3.22461 5.99989C3.22461 5.57187 3.57198 5.2245 4 5.2245H7.44141L7.53516 4.94325C7.7765 4.21921 7.95223 3.65048 8.3125 3.21962C8.61048 2.8633 8.99353 2.5879 9.42578 2.41786C9.94848 2.21229 10.5434 2.2245 11.3066 2.2245H12.6934C13.4566 2.2245 14.0515 2.21229 14.5742 2.41786C15.0065 2.5879 15.3895 2.8633 15.6875 3.21962C16.0478 3.65048 16.2235 4.21921 16.4648 4.94325L16.5586 5.2245H20C20.428 5.2245 20.7754 5.57187 20.7754 5.99989C20.7754 6.42791 20.428 6.77528 20 6.77528H18.7754V16.2001Z" fill="currentColor"/></svg>'
+      };
+
+      const CATEGORY_THEMES = {
+        business: { bg: "#EFE4FA", status: "#815AAD" },
+        design: { bg: "#D5ECF8", status: "#3286B4" },
+        design_changes: { bg: "#D5F0E3", status: "#00915C" },
+        technical: { bg: "#FFEACD", status: "#D77925" },
+        feedback: { bg: "#FFDEDD", status: "#C73D43" }
+      };
+      const CATEGORY_PICKER_ORDER = ["business", "design", "design_changes", "technical", "feedback"];
+
       const linkForm = document.getElementById("linkForm");
       const categoryPanel = document.getElementById("categoryPanel");
       const authorPanel = document.getElementById("authorPanel");
       const fullEditForm = document.getElementById("fullEditForm");
       const categoryList = document.getElementById("categoryList");
       const authorList = document.getElementById("authorList");
+      const categoryPicker = document.getElementById("categoryPicker");
+      const authorPicker = document.getElementById("authorPicker");
+      const authorButton = document.getElementById("authorButton");
+      const categoryButton = document.getElementById("categoryButton");
+      const linkToggleButton = document.getElementById("linkToggleButton");
       const manageLinks = document.getElementById("manageLinks");
+      const manageLinksTitle = document.getElementById("manageLinksTitle");
       const addManageLink = document.getElementById("addManageLink");
       const fullEditTitle = document.getElementById("fullEditTitle");
       const fullEditBody = document.getElementById("fullEditBody");
-      const fullEditCategory = document.getElementById("fullEditCategory");
-      const fullEditAuthor = document.getElementById("fullEditAuthor");
       const fullEditLinks = document.getElementById("fullEditLinks");
+      const linksPanel = document.getElementById("linksPanel");
+      const linksTitle = document.getElementById("linksTitle");
       const addFullEditLink = document.getElementById("addFullEditLink");
+      const linkModalLayer = document.getElementById("linkModalLayer");
+      const linkDialogTitle = document.getElementById("linkDialogTitle");
+      const linkDialogTitleInput = document.getElementById("linkDialogTitleInput");
+      const linkDialogUrlInput = document.getElementById("linkDialogUrlInput");
+      const linkDialogSave = document.getElementById("linkDialogSave");
+      const linkDialogCancel = document.getElementById("linkDialogCancel");
+      const allNotesPanel = document.getElementById("allNotesPanel");
+      const allNotesList = document.getElementById("allNotesList");
+      const allNotesSearch = document.getElementById("allNotesSearch");
+      const allNotesFilters = document.getElementById("allNotesFilters");
+
       let manageLinkState = [];
       let fullEditLinkState = [];
-      let currentMode = "link";
+      let allNotesState = [];
+      let allNotesFilter = "all";
+      let currentMode = "fullEdit";
+      let categoriesState = [];
+      let authorsState = [];
+      let selectedCategory = "technical";
+      let selectedAuthorId = "";
+      let activePicker = null;
+      let editingLinkIndex = null;
+      let activeListFormat = null;
 
-      const MODAL_WIDTHS = {
-        link: 520,
-        category: 320,
-        author: 320,
-        fullEdit: 560
-      };
-
-      const MODAL_MIN_HEIGHTS = {
-        link: 174,
-        category: 120,
-        author: 120,
-        fullEdit: 360
-      };
+      document.getElementById("linkToggleButton").innerHTML = ICONS.link;
+      const numberListButton = document.querySelector('[data-full-format="number"]');
+      const bulletListButton = document.querySelector('[data-full-format="bullet"]');
+      numberListButton.innerHTML = ICONS.listOl;
+      bulletListButton.innerHTML = ICONS.list;
 
       function show(mode) {
         currentMode = mode;
@@ -409,6 +862,7 @@
         categoryPanel.classList.toggle("active", mode === "category");
         authorPanel.classList.toggle("active", mode === "author");
         fullEditForm.classList.toggle("active", mode === "fullEdit");
+        allNotesPanel.classList.toggle("active", mode === "allNotes");
         requestModalResize();
       }
 
@@ -416,138 +870,350 @@
         requestAnimationFrame(() => {
           const activePanel = document.querySelector(".panel.active");
           if (!activePanel) return;
-
           const rect = activePanel.getBoundingClientRect();
-          const minHeight = MODAL_MIN_HEIGHTS[currentMode] || 160;
-          const height = Math.max(minHeight, Math.ceil(rect.height));
-          parent.postMessage(
-            {
-              pluginMessage: {
-                type: "resize",
-                payload: {
-                  width: MODAL_WIDTHS[currentMode] || 520,
-                  height
-                }
+          const minHeight = activePanel.classList.contains("choice-panel") || activePanel.classList.contains("all-notes-panel") ? 0 : 374;
+          parent.postMessage({
+            pluginMessage: {
+              type: "resize",
+              payload: {
+                width: Math.max(216, Math.ceil(rect.width)),
+                height: Math.max(minHeight, Math.ceil(rect.height))
               }
-            },
-            "*"
-          );
+            }
+          }, "*");
         });
       }
 
-      function growTextarea(textarea) {
-        textarea.style.height = "auto";
-        textarea.style.height = `${textarea.scrollHeight + 2}px`;
+      function toPersianNumber(value) {
+        return String(value).replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]);
       }
 
-      function growTextareas() {
-        [fullEditBody].forEach((textarea) => {
-          if (!textarea) return;
-          growTextarea(textarea);
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function categoryTheme(key) {
+        return CATEGORY_THEMES[key] || CATEGORY_THEMES.technical;
+      }
+
+      function findCategory(key) {
+        return categoriesState.find((category) => category.key === key) || categoriesState[0] || { key: "technical", label: "فنی" };
+      }
+
+      function findAuthor(id) {
+        return authorsState.find((author) => author.id === id) || authorsState[0] || { id: "", name: "Zahra", initials: "ZA" };
+      }
+
+      function avatarNode(author) {
+        if (author.avatarSrc) return `<img class="avatar" src="${author.avatarSrc}" alt="" />`;
+        return `<span class="avatar" style="background:${author.avatarFill || "#e5e7eb"}">${author.initials || ""}</span>`;
+      }
+
+      function authorNode(author) {
+        return `<span class="pill author-pill">${avatarNode(author)}<span>${author.name}</span></span>`;
+      }
+
+      function statusNode(category) {
+        const theme = categoryTheme(category.key);
+        return `<span class="pill status-pill" style="--category-bg:${theme.bg};--category-status:${theme.status};">${category.label}</span>`;
+      }
+
+      function renderToolbar() {
+        const category = findCategory(selectedCategory);
+        const theme = categoryTheme(category.key);
+        const author = findAuthor(selectedAuthorId);
+        document.documentElement.style.setProperty("--category-bg", theme.bg);
+        document.documentElement.style.setProperty("--category-status", theme.status);
+        authorButton.innerHTML = authorNode(author);
+        categoryButton.innerHTML = statusNode(category);
+      }
+
+      function closePickers() {
+        activePicker = null;
+        categoryPicker.classList.remove("active");
+        authorPicker.classList.remove("active");
+        categoryButton.classList.remove("active");
+        authorButton.classList.remove("active");
+        requestModalResize();
+      }
+
+      function togglePicker(type) {
+        if (activePicker === type) {
+          closePickers();
+          return;
+        }
+        activePicker = type;
+        categoryPicker.classList.toggle("active", type === "category");
+        authorPicker.classList.toggle("active", type === "author");
+        categoryButton.classList.toggle("active", type === "category");
+        authorButton.classList.toggle("active", type === "author");
+        requestModalResize();
+      }
+
+      function renderCategoryChoices(target, selected, closeAfterSelect) {
+        target.innerHTML = "";
+        [...categoriesState]
+          .sort((a, b) => CATEGORY_PICKER_ORDER.indexOf(a.key) - CATEGORY_PICKER_ORDER.indexOf(b.key))
+          .forEach((category) => {
+          const theme = categoryTheme(category.key);
+          const button = document.createElement("button");
+          button.type = "button";
+          if (closeAfterSelect) {
+            button.className = "status-choice";
+            button.innerHTML = statusNode(category);
+          } else {
+            button.className = "choice-row";
+            button.innerHTML = `<span class="category-dot" style="background:${theme.status};"></span><span class="choice-label">${category.label}</span>`;
+          }
+          button.addEventListener("click", () => {
+            selectedCategory = category.key;
+            renderToolbar();
+            if (closeAfterSelect) {
+              closePickers();
+              emitLiveUpdate();
+            }
+            else parent.postMessage({ pluginMessage: { type: "saveCategory", payload: { category: category.key } } }, "*");
+          });
+          target.appendChild(button);
+        });
+      }
+
+      function renderAuthorChoices(target, selected, closeAfterSelect) {
+        target.innerHTML = "";
+        authorsState.forEach((author) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          if (closeAfterSelect) {
+            button.className = "author-choice";
+            button.innerHTML = authorNode(author);
+          } else {
+            button.className = "choice-row";
+            button.innerHTML = `${avatarNode(author)}<span class="choice-label">${author.name}</span>`;
+          }
+          button.addEventListener("click", () => {
+            selectedAuthorId = author.id;
+            renderToolbar();
+            if (closeAfterSelect) {
+              closePickers();
+              emitLiveUpdate();
+            }
+            else parent.postMessage({ pluginMessage: { type: "saveAuthor", payload: { authorId: author.id } } }, "*");
+          });
+          target.appendChild(button);
+        });
+      }
+
+      function normalizeLinkState(links) {
+        return (links || []).map((link, index) => ({
+          id: link.id || `new-${Date.now()}-${index}`,
+          title: link.title || "",
+          url: link.url || ""
+        }));
+      }
+
+      function renderLinkRows(container, links, titleNode, onChange) {
+        container.innerHTML = "";
+        titleNode.textContent = `لینک‌ها (${toPersianNumber(links.length)})`;
+        links.forEach((link, index) => {
+          const row = document.createElement("div");
+          row.className = "link-row";
+          row.dataset.linkId = link.id;
+
+          const content = document.createElement("div");
+          content.className = "link-content";
+
+          const actions = document.createElement("div");
+          actions.className = "link-actions";
+
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "trash-button";
+          remove.innerHTML = ICONS.trash;
+          remove.addEventListener("click", () => {
+            links.splice(index, 1);
+            onChange(links);
+            emitLiveUpdate();
+          });
+
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "trash-button link-action-edit";
+          edit.innerHTML = ICONS.penClip;
+          edit.addEventListener("click", () => {
+            openLinkDialog(index);
+          });
+
+          const url = document.createElement("span");
+          url.className = "link-url-text";
+          url.textContent = link.url;
+
+          actions.append(remove, edit, url);
+          content.append(actions);
+
+          const title = document.createElement("div");
+          title.className = "link-title-display";
+          const titleIcon = document.createElement("span");
+          titleIcon.innerHTML = ICONS.linkOut;
+          const titleText = document.createElement("span");
+          titleText.textContent = link.title || link.url;
+          title.append(titleIcon, titleText);
+
+          row.append(title, content);
+          container.appendChild(row);
         });
         requestModalResize();
       }
 
-      document.querySelectorAll("[data-cancel]").forEach((button) => {
-        button.addEventListener("click", () => {
-          parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
-        });
-      });
+      function renderFullEditLinks(links) {
+        fullEditLinkState = normalizeLinkState(links);
+        linksPanel.classList.toggle("active", fullEditLinkState.length > 0);
+        renderLinkRows(fullEditLinks, fullEditLinkState, linksTitle, renderFullEditLinks);
+      }
 
-      linkForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        parent.postMessage(
-          {
-            pluginMessage: {
-              type: "saveLinks",
-              payload: { links: readManageLinks() }
-            }
-          },
-          "*"
-        );
-      });
+      function renderManageLinks(links) {
+        manageLinkState = normalizeLinkState(links);
+        renderLinkRows(manageLinks, manageLinkState, manageLinksTitle, renderManageLinks);
+      }
 
-      fullEditForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        parent.postMessage(
-          {
-            pluginMessage: {
-              type: "saveNote",
-              payload: {
-                title: fullEditTitle.value,
-                body: fullEditBody.value,
-                category: fullEditCategory.value,
-                authorId: fullEditAuthor.value,
-                links: readFullEditLinks()
-              }
-            }
-          },
-          "*"
-        );
-      });
-
-      addManageLink.addEventListener("click", () => {
-        manageLinkState.push({
-          id: `new-${Date.now()}-${manageLinkState.length}`,
-          title: "",
-          url: ""
-        });
-        renderManageLinks(manageLinkState);
-      });
-
-      addFullEditLink.addEventListener("click", () => {
-        fullEditLinkState.push({
-          id: `new-${Date.now()}-${fullEditLinkState.length}`,
-          title: "",
-          url: ""
-        });
-        renderFullEditLinks(fullEditLinkState);
-      });
-
-      fullEditBody.addEventListener("keydown", (event) => {
-        if (event.key === "Tab") {
-          event.preventDefault();
-          replaceSelection(fullEditBody, "  ");
+      function renderAllNotes(message = {}) {
+        if (message.loading) {
+          allNotesFilters.innerHTML = '<button type="button" class="all-notes-tab selected">همه (۰)</button>';
+          allNotesList.innerHTML = '<div class="all-notes-empty">در حال بارگذاری یادداشت‌ها...</div>';
           return;
         }
 
-        if (event.key === "Enter") {
-          continueList(fullEditBody, event);
+        if (message.error) {
+          allNotesFilters.innerHTML = '<button type="button" class="all-notes-tab selected">همه (۰)</button>';
+          allNotesList.innerHTML = `<div class="all-notes-empty">${escapeHtml(message.error)}</div>`;
+          return;
         }
-      });
-      fullEditBody.addEventListener("input", growTextareas);
 
-      document.querySelectorAll("[data-full-format]").forEach((button) => {
-        button.addEventListener("click", () => {
-          applyEditorFormat(fullEditBody, button.dataset.fullFormat);
+        const categoryCounts = allNotesState.reduce((counts, note) => {
+          const key = note.category || "technical";
+          counts[key] = (counts[key] || 0) + 1;
+          return counts;
+        }, {});
+
+        const filters = [
+          { key: "all", label: "همه", count: allNotesState.length },
+          ...CATEGORY_PICKER_ORDER
+            .filter((key) => categoryCounts[key])
+            .map((key) => ({
+              key,
+              label: allNotesState.find((note) => note.category === key)?.categoryLabel || findCategory(key).label,
+              count: categoryCounts[key]
+            }))
+        ];
+
+        if (allNotesFilter !== "all" && !categoryCounts[allNotesFilter]) allNotesFilter = "all";
+
+        allNotesFilters.innerHTML = "";
+        filters.forEach((filter) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `all-notes-tab${allNotesFilter === filter.key ? " selected" : ""}`;
+          button.textContent = `${filter.label} (${toPersianNumber(filter.count)})`;
+          button.addEventListener("click", () => {
+            allNotesFilter = filter.key;
+            renderAllNotes();
+          });
+          allNotesFilters.appendChild(button);
         });
-      });
 
-      function replaceSelection(editor, text) {
-        const start = editor.selectionStart;
-        const end = editor.selectionEnd;
-        editor.value = editor.value.slice(0, start) + text + editor.value.slice(end);
-        editor.focus();
-        editor.selectionStart = editor.selectionEnd = start + text.length;
-        growTextareas();
+        const query = allNotesSearch.value.trim().toLowerCase();
+        const notes = allNotesState.filter((note) => {
+          const text = `${note.title} ${note.authorName} ${note.pageName} ${note.categoryLabel}`.toLowerCase();
+          const matchesSearch = !query || text.includes(query);
+          const matchesFilter = allNotesFilter === "all" || note.category === allNotesFilter;
+          return matchesSearch && matchesFilter;
+        });
+
+        allNotesList.innerHTML = "";
+
+        if (notes.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "all-notes-empty";
+          empty.textContent = "یادداشتی پیدا نشد.";
+          allNotesList.appendChild(empty);
+          return;
+        }
+
+        notes.forEach((note) => {
+          const row = document.createElement("button");
+          row.type = "button";
+          row.className = "all-note-row";
+          const chipBg = note.categoryBg || categoryTheme(note.category).bg;
+          const chipColor = note.categoryStatus || categoryTheme(note.category).status;
+          row.innerHTML = `
+            <div class="all-note-content">
+              <div class="all-note-text">
+                <div class="all-note-title">${escapeHtml(note.title)}</div>
+                <div class="all-note-meta">
+                  <span>${escapeHtml(note.authorName)}</span>
+                  <span class="all-note-meta-dot"></span>
+                  <span>${escapeHtml(note.pageName)}</span>
+                  <span class="all-note-meta-dot"></span>
+                  <span>${escapeHtml(note.updatedLabel)}</span>
+                </div>
+              </div>
+            </div>
+            <span class="all-note-chip" style="background:${chipBg};color:${chipColor};">${escapeHtml(note.categoryLabel)}</span>
+          `;
+          row.addEventListener("click", () => {
+            parent.postMessage({ pluginMessage: { type: "selectNote", payload: { nodeId: note.id } } }, "*");
+          });
+          allNotesList.appendChild(row);
+        });
       }
 
-      function replaceRange(editor, start, end, text) {
-        editor.value = editor.value.slice(0, start) + text + editor.value.slice(end);
-        editor.focus();
-        editor.selectionStart = editor.selectionEnd = start + text.length;
-        growTextareas();
+      function readLinks(container) {
+        const source = container === fullEditLinks ? fullEditLinkState : manageLinkState;
+        return source.filter((link) => link.title || link.url);
       }
 
-      function wrapSelection(editor, beforeText, afterText) {
-        const start = editor.selectionStart;
-        const end = editor.selectionEnd;
-        const selected = editor.value.slice(start, end) || "متن";
-        editor.value = editor.value.slice(0, start) + beforeText + selected + afterText + editor.value.slice(end);
-        editor.focus();
-        editor.selectionStart = start + beforeText.length;
-        editor.selectionEnd = start + beforeText.length + selected.length;
-        growTextareas();
+      function readFullEditPayload() {
+        return {
+          title: fullEditTitle.value,
+          body: fullEditBody.value,
+          category: selectedCategory,
+          authorId: selectedAuthorId,
+          links: readLinks(fullEditLinks)
+        };
+      }
+
+      function emitLiveUpdate() {
+        if (currentMode !== "fullEdit") return;
+        parent.postMessage({ pluginMessage: { type: "liveUpdate", payload: readFullEditPayload() } }, "*");
+      }
+
+      function openLinkDialog(index = null) {
+        closePickers();
+        editingLinkIndex = index;
+        const link = index === null ? { title: "", url: "" } : fullEditLinkState[index] || { title: "", url: "" };
+        linkDialogTitle.textContent = index === null ? "افزودن لینک" : "ویرایش لینک";
+        linkDialogSave.textContent = index === null ? "افزودن لینک" : "ذخیره لینک";
+        linkDialogTitleInput.value = link.title || "";
+        linkDialogUrlInput.value = link.url || "";
+        linkDialogUrlInput.classList.toggle("url-filled", Boolean(link.url));
+        linkModalLayer.classList.add("active");
+        requestModalResize();
+        linkDialogTitleInput.focus();
+      }
+
+      function closeLinkDialog() {
+        linkModalLayer.classList.remove("active");
+        editingLinkIndex = null;
+      }
+
+      function setActiveListFormat(format) {
+        activeListFormat = format;
+        bulletListButton.classList.toggle("active", format === "bullet");
+        numberListButton.classList.toggle("active", format === "number");
       }
 
       function selectedLineRange(editor) {
@@ -562,6 +1228,26 @@
         };
       }
 
+      function applyEditorFormat(editor, format) {
+        const value = editor.value;
+        const range = selectedLineRange(editor);
+        const before = value.slice(0, range.start);
+        const selected = value.slice(range.start, range.end);
+        const after = value.slice(range.end);
+        const lines = selected.split("\n");
+        const next = lines
+          .map((line, index) => {
+            if (format === "bullet") return line.replace(/^(\s*)(?:[-•]\s+|\d+\.\s+)?/, "$1• ");
+            if (format === "number") return line.replace(/^(\s*)(?:[-•]\s+|\d+\.\s+)?/, `$1${index + 1}. `);
+            return line;
+          })
+          .join("\n");
+        editor.value = before + next + after;
+        editor.focus();
+        editor.selectionStart = range.start;
+        editor.selectionEnd = range.start + next.length;
+      }
+
       function currentLine(editor) {
         const value = editor.value;
         const cursor = editor.selectionStart;
@@ -570,312 +1256,181 @@
         return {
           start,
           end: end === -1 ? value.length : end,
-          text: value.slice(start, end)
+          text: value.slice(start, end),
+          beforeCursor: value.slice(start, cursor)
         };
       }
 
-      function continueList(editor, event) {
-        const line = currentLine(editor);
-        const beforeCursor = editor.value.slice(line.start, editor.selectionStart);
-        const bullet = beforeCursor.match(/^(\s*)([-•])\s+(.*)$/);
-        const numbered = beforeCursor.match(/^(\s*)(\d+)\.\s+(.*)$/);
+      function replaceRange(editor, start, end, text) {
+        editor.value = editor.value.slice(0, start) + text + editor.value.slice(end);
+        const cursor = start + text.length;
+        editor.selectionStart = cursor;
+        editor.selectionEnd = cursor;
+      }
 
-        if (!bullet && !numbered) return;
+      function continueActiveList(editor, event) {
+        if (event.key !== "Enter" || event.shiftKey || editor.selectionStart !== editor.selectionEnd) return;
+        const line = currentLine(editor);
+        const emptyListLine = line.text.match(/^(\s*)(?:[-•]|\d+\.)\s*$/);
+        if (emptyListLine) {
+          event.preventDefault();
+          replaceRange(editor, line.start, line.end, "");
+          setActiveListFormat(null);
+          emitLiveUpdate();
+          return;
+        }
+
+        const numberedLine = line.beforeCursor.match(/^(\s*)(\d+)\.\s+(.*)$/);
+        const bulletLine = line.beforeCursor.match(/^(\s*)[-•]\s+(.*)$/);
+        const format = numberedLine ? "number" : bulletLine ? "bullet" : activeListFormat;
+        if (!format) return;
 
         event.preventDefault();
+        const indent = numberedLine ? numberedLine[1] : bulletLine ? bulletLine[1] : "";
+        const prefix = format === "number" ? `${indent}${numberedLine ? Number(numberedLine[2]) + 1 : 1}. ` : `${indent}• `;
+        replaceRange(editor, editor.selectionStart, editor.selectionEnd, `\n${prefix}`);
+        setActiveListFormat(format);
+        emitLiveUpdate();
+      }
 
-        if (bullet) {
-          if (!bullet[3].trim()) {
-            replaceRange(editor, line.start, editor.selectionStart, "");
-            return;
-          }
-          replaceSelection(editor, `\n${bullet[1]}• `);
+      authorButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePicker("author");
+      });
+
+      categoryButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        togglePicker("category");
+      });
+
+      linkToggleButton.addEventListener("click", () => {
+        openLinkDialog();
+      });
+
+      addFullEditLink.addEventListener("click", () => {
+        openLinkDialog();
+      });
+
+      addManageLink.addEventListener("click", () => {
+        manageLinkState.push({ id: `new-${Date.now()}-${manageLinkState.length}`, title: "", url: "" });
+        renderManageLinks(manageLinkState);
+      });
+
+      document.querySelectorAll("[data-full-format]").forEach((button) => {
+        button.addEventListener("click", () => {
+          closePickers();
+          const format = button.dataset.fullFormat;
+          setActiveListFormat(format);
+          applyEditorFormat(fullEditBody, format);
+          emitLiveUpdate();
+        });
+      });
+
+      fullEditTitle.addEventListener("input", emitLiveUpdate);
+      fullEditBody.addEventListener("input", emitLiveUpdate);
+
+      fullEditBody.addEventListener("keydown", (event) => {
+        continueActiveList(fullEditBody, event);
+      });
+
+      fullEditForm.addEventListener("click", (event) => {
+        if (!event.target.closest(".picker-strip") && !event.target.closest("#authorButton") && !event.target.closest("#categoryButton")) {
+          closePickers();
+        }
+      });
+
+      linkDialogUrlInput.addEventListener("input", () => {
+        linkDialogUrlInput.classList.toggle("url-filled", Boolean(linkDialogUrlInput.value.trim()));
+      });
+
+      [linkDialogTitleInput, linkDialogUrlInput].forEach((input) => {
+        input.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter") return;
+          event.preventDefault();
+          event.stopPropagation();
+          linkDialogSave.click();
+        });
+      });
+
+      linkDialogSave.addEventListener("click", () => {
+        const nextLink = {
+          id: editingLinkIndex === null ? `new-${Date.now()}-${fullEditLinkState.length}` : fullEditLinkState[editingLinkIndex].id,
+          title: linkDialogTitleInput.value.trim(),
+          url: linkDialogUrlInput.value.trim()
+        };
+        if (!nextLink.title && !nextLink.url) {
+          closeLinkDialog();
           return;
         }
+        if (editingLinkIndex === null) fullEditLinkState.push(nextLink);
+        else fullEditLinkState[editingLinkIndex] = nextLink;
+        closeLinkDialog();
+        renderFullEditLinks(fullEditLinkState);
+        emitLiveUpdate();
+      });
 
-        if (numbered) {
-          if (!numbered[3].trim()) {
-            replaceRange(editor, line.start, editor.selectionStart, "");
-            return;
-          }
-          replaceSelection(editor, `\n${numbered[1]}${Number(numbered[2]) + 1}. `);
-        }
-      }
+      linkDialogCancel.addEventListener("click", closeLinkDialog);
 
-      function applyEditorFormat(editor, format) {
-        const value = editor.value;
-        const range = selectedLineRange(editor);
-        const before = value.slice(0, range.start);
-        const selected = value.slice(range.start, range.end);
-        const after = value.slice(range.end);
-        const lines = selected.split("\n");
+      linkModalLayer.addEventListener("click", (event) => {
+        if (event.target === linkModalLayer) closeLinkDialog();
+      });
 
-        const nextLines = lines.map((line, index) => {
-          if (format === "bullet") return line.replace(/^(\s*)(?:[-•]\s+|\d+\.\s+)?/, "$1• ");
-          if (format === "number") return line.replace(/^(\s*)(?:[-•]\s+|\d+\.\s+)?/, `$1${index + 1}. `);
-          return line;
-        });
+      fullEditForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        emitLiveUpdate();
+      });
 
-        const next = nextLines.join("\n");
-        editor.value = before + next + after;
-        editor.focus();
-        editor.selectionStart = range.start;
-        editor.selectionEnd = range.start + next.length;
-        growTextareas();
-      }
+      linkForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        parent.postMessage({ pluginMessage: { type: "saveLinks", payload: { links: readLinks(manageLinks) } } }, "*");
+      });
 
-      function renderCategories(categories, selectedCategory) {
-        categoryList.innerHTML = "";
-        categories.forEach((category) => {
-          const row = document.createElement("button");
-          row.type = "button";
-          row.className = "category-row";
-          if (category.key === selectedCategory) row.classList.add("selected");
-
-          const dot = document.createElement("span");
-          dot.className = "dot";
-          dot.style.background = category.color;
-
-          const label = document.createElement("span");
-          label.textContent = category.label;
-
-          row.append(dot, label);
-          row.addEventListener("click", () => {
-            parent.postMessage(
-              {
-                pluginMessage: {
-                  type: "saveCategory",
-                  payload: { category: category.key }
-                }
-              },
-              "*"
-            );
-          });
-
-          categoryList.appendChild(row);
-        });
-        requestModalResize();
-      }
-
-      function renderAuthors(authors, selectedAuthorId) {
-        authorList.innerHTML = "";
-        authors.forEach((author) => {
-          const row = document.createElement("button");
-          row.type = "button";
-          row.className = "category-row";
-          if (author.id === selectedAuthorId) row.classList.add("selected");
-
-          const avatar = author.avatarSrc ? document.createElement("img") : document.createElement("span");
-          avatar.className = author.avatarSrc ? "author-avatar" : "dot";
-          if (author.avatarSrc) {
-            avatar.src = author.avatarSrc;
-            avatar.alt = "";
-          } else {
-            avatar.style.background = author.avatarFill || "#e5e7eb";
-          }
-
-          const label = document.createElement("span");
-          label.textContent = author.name;
-
-          row.append(avatar, label);
-          row.addEventListener("click", () => {
-            parent.postMessage(
-              {
-                pluginMessage: {
-                  type: "saveAuthor",
-                  payload: { authorId: author.id }
-                }
-              },
-              "*"
-            );
-          });
-
-          authorList.appendChild(row);
-        });
-        requestModalResize();
-      }
-
-      function renderFullEditCategories(categories, selectedCategory) {
-        fullEditCategory.innerHTML = "";
-        categories.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.key;
-          option.textContent = category.label;
-          option.selected = category.key === selectedCategory;
-          fullEditCategory.appendChild(option);
-        });
-      }
-
-      function renderFullEditAuthors(authors, selectedAuthorId) {
-        fullEditAuthor.innerHTML = "";
-        authors.forEach((author) => {
-          const option = document.createElement("option");
-          option.value = author.id;
-          option.textContent = author.name;
-          option.selected = author.id === selectedAuthorId;
-          fullEditAuthor.appendChild(option);
-        });
-      }
-
-      function readManageLinks() {
-        return Array.from(manageLinks.querySelectorAll(".link-row"))
-          .map((row) => ({
-            id: row.dataset.linkId || "",
-            title: row.querySelector("[data-link-title]").value.trim(),
-            url: row.querySelector("[data-link-url]").value.trim()
-          }))
-          .filter((link) => link.title || link.url);
-      }
-
-      function renderManageLinks(links) {
-        manageLinkState = links.map((link, index) => ({
-          id: link.id || `new-${Date.now()}-${index}`,
-          title: link.title || "",
-          url: link.url || ""
-        }));
-        manageLinks.innerHTML = "";
-
-        if (manageLinkState.length === 0) {
-          const empty = document.createElement("div");
-          empty.className = "empty-links";
-          empty.textContent = "هنوز لینکی اضافه نشده است.";
-          manageLinks.appendChild(empty);
-          requestModalResize();
-          return;
-        }
-
-        manageLinkState.forEach((link, index) => {
-          const row = document.createElement("div");
-          row.className = "link-row";
-          row.dataset.linkId = link.id;
-
-          const titleInput = document.createElement("input");
-          titleInput.type = "text";
-          titleInput.placeholder = "عنوان لینک";
-          titleInput.value = link.title;
-          titleInput.dataset.linkTitle = "true";
-          titleInput.addEventListener("input", () => {
-            manageLinkState[index].title = titleInput.value;
-          });
-
-          const urlInput = document.createElement("input");
-          urlInput.type = "text";
-          urlInput.placeholder = "نشانی لینک";
-          urlInput.dir = "ltr";
-          urlInput.style.textAlign = "left";
-          urlInput.value = link.url;
-          urlInput.dataset.linkUrl = "true";
-          urlInput.addEventListener("input", () => {
-            manageLinkState[index].url = urlInput.value;
-          });
-
-          const removeButton = document.createElement("button");
-          removeButton.type = "button";
-          removeButton.className = "link-remove";
-          removeButton.textContent = "×";
-          removeButton.addEventListener("click", () => {
-            manageLinkState.splice(index, 1);
-            renderManageLinks(manageLinkState);
-          });
-
-          row.append(titleInput, urlInput, removeButton);
-          manageLinks.appendChild(row);
-        });
-        requestModalResize();
-      }
-
-      function readFullEditLinks() {
-        return Array.from(fullEditLinks.querySelectorAll(".link-row"))
-          .map((row) => ({
-            id: row.dataset.linkId || "",
-            title: row.querySelector("[data-link-title]").value.trim(),
-            url: row.querySelector("[data-link-url]").value.trim()
-          }))
-          .filter((link) => link.title || link.url);
-      }
-
-      function renderFullEditLinks(links) {
-        fullEditLinkState = links.map((link, index) => ({
-          id: link.id || `new-${Date.now()}-${index}`,
-          title: link.title || "",
-          url: link.url || ""
-        }));
-        fullEditLinks.innerHTML = "";
-
-        if (fullEditLinkState.length === 0) {
-          const empty = document.createElement("div");
-          empty.className = "empty-links";
-          empty.textContent = "هنوز لینکی اضافه نشده است.";
-          fullEditLinks.appendChild(empty);
-          requestModalResize();
-          return;
-        }
-
-        fullEditLinkState.forEach((link, index) => {
-          const row = document.createElement("div");
-          row.className = "link-row";
-          row.dataset.linkId = link.id;
-
-          const titleInput = document.createElement("input");
-          titleInput.type = "text";
-          titleInput.placeholder = "عنوان لینک";
-          titleInput.value = link.title;
-          titleInput.dataset.linkTitle = "true";
-          titleInput.addEventListener("input", () => {
-            fullEditLinkState[index].title = titleInput.value;
-          });
-
-          const urlInput = document.createElement("input");
-          urlInput.type = "text";
-          urlInput.placeholder = "نشانی لینک";
-          urlInput.dir = "ltr";
-          urlInput.style.textAlign = "left";
-          urlInput.value = link.url;
-          urlInput.dataset.linkUrl = "true";
-          urlInput.addEventListener("input", () => {
-            fullEditLinkState[index].url = urlInput.value;
-          });
-
-          const removeButton = document.createElement("button");
-          removeButton.type = "button";
-          removeButton.className = "link-remove";
-          removeButton.textContent = "×";
-          removeButton.addEventListener("click", () => {
-            fullEditLinkState.splice(index, 1);
-            renderFullEditLinks(fullEditLinkState);
-          });
-
-          row.append(titleInput, urlInput, removeButton);
-          fullEditLinks.appendChild(row);
-        });
-        requestModalResize();
-      }
+      allNotesSearch.addEventListener("input", renderAllNotes);
 
       onmessage = (event) => {
         const message = event.data.pluginMessage;
         if (!message) return;
 
         if (message.mode === "category") {
+          categoriesState = message.categories || [];
+          selectedCategory = message.selectedCategory;
           show("category");
-          renderCategories(message.categories || [], message.selectedCategory);
+          renderCategoryChoices(categoryList, selectedCategory, false);
           return;
         }
 
         if (message.mode === "author") {
+          authorsState = message.authors || [];
+          selectedAuthorId = message.selectedAuthorId;
           show("author");
-          renderAuthors(message.authors || [], message.selectedAuthorId);
+          renderAuthorChoices(authorList, selectedAuthorId, false);
           return;
         }
 
         if (message.mode === "fullEdit") {
-          show("fullEdit");
-          renderFullEditCategories(message.categories || [], message.category);
-          renderFullEditAuthors(message.authors || [], message.authorId);
+          categoriesState = message.categories || [];
+          authorsState = message.authors || [];
+          selectedCategory = message.category || "technical";
+          selectedAuthorId = message.authorId || "";
           fullEditTitle.value = message.title || "";
           fullEditBody.value = message.body || "";
+          renderToolbar();
+          renderCategoryChoices(categoryPicker, selectedCategory, true);
+          renderAuthorChoices(authorPicker, selectedAuthorId, true);
           renderFullEditLinks(message.links || []);
-          growTextareas();
-          fullEditTitle.focus();
+          setActiveListFormat(null);
+          closePickers();
+          show("fullEdit");
+          if (message.openLinkDialog) requestAnimationFrame(() => openLinkDialog());
+          return;
+        }
+
+        if (message.mode === "allNotes") {
+          allNotesState = message.notes || [];
+          allNotesFilter = "all";
+          allNotesSearch.value = "";
+          renderAllNotes(message);
+          show("allNotes");
           return;
         }
 
